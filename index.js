@@ -9,7 +9,7 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/',(req,res)=>{
-    res.send("welcome to knowledge zone ")
+    res.send("welcome to Knowledge Zone ")
 })
 
 app.listen(port,()=>{
