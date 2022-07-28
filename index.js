@@ -50,6 +50,10 @@ async function run() {
       const result = await ClassTwoCourses.find().toArray();
       res.send(result);
     });
+    app.get("/classThree", async (req, res) => {
+      const result = await ClassThreeCourses.find().toArray();
+      res.send(result);
+    });
 
     app.get("/classFour", async (req, res) => {
       const result = await ClassFourCourses.find().toArray();
