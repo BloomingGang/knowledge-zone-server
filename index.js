@@ -21,7 +21,8 @@ async function run() {
     const blogCollection = client.db("knowledge-zone").collection("blog-collection");
 
     // for  class one to twelve database start 
-    const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
+    const ClassOneCourses = client.db("classOneToTwelve").collection("classOne");
+    const ClassTwoCourses = client.db("classOneToTwelve").collection("classTwo");
   
     // for  class one to twelve database end 
 
@@ -38,7 +39,11 @@ async function run() {
 
     // for  class one to twelve start
     app.get("/classOne", async (req, res) => {
-      const result = await ClassOneCourse.find().toArray();
+      const result = await ClassOneCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classTwo", async (req, res) => {
+      const result = await ClassTwoCourses.find().toArray();
       res.send(result);
     });
    
