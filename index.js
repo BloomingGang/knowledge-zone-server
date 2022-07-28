@@ -32,6 +32,7 @@ async function run() {
     const ClassNineCourses = client.db("classOneToTwelve").collection("classNine");
     const ClassTenCourses = client.db("classOneToTwelve").collection("classTen");
     const ClassElevenCourses = client.db("classOneToTwelve").collection("classEleven");
+    const ClassTwelveCourses = client.db("classOneToTwelve").collection("classTwelve");
   
     // for  class one to twelve database end 
 
@@ -91,6 +92,10 @@ async function run() {
     });
     app.get("/classEleven", async (req, res) => {
       const result = await ClassElevenCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classTwelve", async (req, res) => {
+      const result = await ClassTwelveCourses.find().toArray();
       res.send(result);
     });
    
