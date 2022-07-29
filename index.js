@@ -99,11 +99,9 @@ async function run() {
       res.send(result);
     });
    
- 
-   
-
 
     // for  class one to twelve end
+    // class one to twelve student api donegi 
 
 
   } finally {
