@@ -39,6 +39,7 @@ async function run() {
     // for courses routes  start
 
     const freeCourse=client.db("courses").collection("freeCourse");
+    const discountOCurse=client.db("courses").collection("discountOCurse");
     const liveCourse=client.db("courses").collection("liveCourse");
     // for courses routes  start
       
