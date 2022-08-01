@@ -36,6 +36,13 @@ async function run() {
   
     // for  class one to twelve database end 
 
+    // for courses routes  start
+
+    const freeCourse=client.db("courses").collection("freeCourse");
+    // for courses routes  start
+      
+
+
     app.get('/books', async (req, res) => {
       const result = await booksCollection.find().toArray()
       res.send(result)
@@ -101,7 +108,7 @@ async function run() {
    
 
     // for  class one to twelve end
-    // class one to twelve student api donegi 
+    // class one to twelve student api done
 
 
   } finally {
