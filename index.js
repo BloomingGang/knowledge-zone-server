@@ -28,8 +28,10 @@ async function run() {
       .collection("blog-collection");
 
     // for  class one to twelve database start
+
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
-    // for  class one to twelve database start
+    
+
     const ClassOneCourses = client
       .db("classOneToTwelve")
       .collection("classOne");
@@ -76,7 +78,8 @@ async function run() {
       res.send({ token });
     });
 
-    // for  class one to twelve database end
+
+
 
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
@@ -149,7 +152,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("welcome to Knowledge Zone");
+
+  res.send("welcome to Knowledge Zone.....");
+
 });
 
 app.listen(port, () => {
