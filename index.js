@@ -115,7 +115,11 @@ async function run() {
 
     // for course routes api create  start
     app.get("/freeCourse", async (req, res) => {
-      const freeCourse = await ClassTwelveCourses.find().toArray();
+      const result = await freeCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/freeCourse", async (req, res) => {
+      const result = await liveCourse.find().toArray();
       res.send(result);
     });
     // for course routes api create  end
