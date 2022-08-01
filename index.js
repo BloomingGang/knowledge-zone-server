@@ -28,55 +28,24 @@ async function run() {
 
     // for  class one to twelve database start
 
-    const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
-    
+    // for courses routes  start
 
-    const ClassOneCourses = client
-      .db("classOneToTwelve")
-      .collection("classOne");
-    const ClassTwoCourses = client
-      .db("classOneToTwelve")
-      .collection("classTwo");
-    const ClassThreeCourses = client
-      .db("classOneToTwelve")
-      .collection("classThree");
-    const ClassFourCourses = client
-      .db("classOneToTwelve")
-      .collection("classFour");
-    const ClassFiveCourses = client
-      .db("classOneToTwelve")
-      .collection("classFive");
-    const ClassSixCourses = client
-      .db("classOneToTwelve")
-      .collection("classSix");
-    const ClassSevenCourses = client
-      .db("classOneToTwelve")
-      .collection("classSeven");
-    const ClassEightCourses = client
-      .db("classOneToTwelve")
-      .collection("classEight");
-    const ClassNineCourses = client
-      .db("classOneToTwelve")
-      .collection("classNine");
-    const ClassTenCourses = client
-      .db("classOneToTwelve")
-      .collection("classTen");
-    const ClassElevenCourses = client
-      .db("classOneToTwelve")
-      .collection("classEleven");
-    const ClassTwelveCourses = client
-      .db("classOneToTwelve")
-      .collection("classTwelve");
+    const freeCourse=client.db("courses").collection("freeCourse");
+    const discountCourse=client.db("courses").collection("discountCourse");
+    const liveCourse=client.db("courses").collection("liveCourse");
+    const specialCourse=client.db("courses").collection("specialCourse");
+    const islamicCourse=client.db("courses").collection("islamicCourse");
+    const kidsCourse=client.db("courses").collection("kidsCourse");
+    const entertainCourse=client.db("courses").collection("entertainCourse");
 
-    // for  class one to twelve database end
+    // for courses routes  start
+      
 
 
-
-
-    app.get("/books", async (req, res) => {
-      const result = await booksCollection.find().toArray();
-      res.send(result);
-    });
+    app.get('/books', async (req, res) => {
+      const result = await booksCollection.find().toArray()
+      res.send(result)
+    })
 
     app.get("/blogs", async (req, res) => {
       const result = await blogCollection.find().toArray();
@@ -136,7 +105,43 @@ async function run() {
     });
 
     // for  class one to twelve end
-    // class one to twelve student api donegi
+    // class one to twelve student api done
+
+
+
+    // for course routes api create  start
+    app.get("/freeCourse", async (req, res) => {
+      const result = await freeCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/discountCourse", async (req, res) => {
+      const result = await discountCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/freeCourse", async (req, res) => {
+      const result = await liveCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/specialCourse", async (req, res) => {
+      const result = await specialCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/islamicCourse", async (req, res) => {
+      const result = await islamicCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/kidsCourse", async (req, res) => {
+      const result = await kidsCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/entertainCourse", async (req, res) => {
+      const result = await entertainCourse.find().toArray();
+      res.send(result);
+    });
+    // for course routes api create  end
+    // done 
+
+
   } finally {
     //   await client.close();
   }
