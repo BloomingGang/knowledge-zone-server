@@ -19,12 +19,8 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    const booksCollection = client
-      .db("knowledge-zone")
-      .collection("books-collection");
-    const blogCollection = client
-      .db("knowledge-zone")
-      .collection("blog-collection");
+    const booksCollection = client.db("knowledge-zone").collection("books-collection");
+    const blogCollection = client.db("knowledge-zone").collection("blog-collection");
 
     // for  class one to twelve database start
 
