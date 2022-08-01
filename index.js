@@ -3,6 +3,7 @@ const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 require("dotenv").config();
 const app = express();
+const jwt = require("jsonwebtoken");
 const port = process.env.PORT || 5000;
 
 //middleware
@@ -66,7 +67,14 @@ async function run() {
       .db("classOneToTwelve")
       .collection("classTwelve");
 
-    // for  class one to twelve database end
+    //when user sign in and login then get a token
+    app.put("/login/:email", async (req, res) => {
+      const email = req.params.email;
+      const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN, {
+        expiresIn: "2d",
+      });
+      res.send({ token });
+    });
 
     // for  class one to twelve database end
 
