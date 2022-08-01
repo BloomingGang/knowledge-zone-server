@@ -39,8 +39,10 @@ async function run() {
     // for courses routes  start
 
     const freeCourse=client.db("courses").collection("freeCourse");
-    const discountCurse=client.db("courses").collection("discountCurse");
+    const discountCourse=client.db("courses").collection("discountCourse");
     const liveCourse=client.db("courses").collection("liveCourse");
+    const specialCourse=client.db("courses").collection("specialCourse");
+
     // for courses routes  start
       
 
@@ -119,12 +121,16 @@ async function run() {
       const result = await freeCourse.find().toArray();
       res.send(result);
     });
-    app.get("/discountCurse", async (req, res) => {
-      const result = await discountCurse.find().toArray();
+    app.get("/discountCourse", async (req, res) => {
+      const result = await discountCourse.find().toArray();
       res.send(result);
     });
     app.get("/freeCourse", async (req, res) => {
       const result = await liveCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/specialCourse", async (req, res) => {
+      const result = await specialCourse.find().toArray();
       res.send(result);
     });
     // for course routes api create  end
