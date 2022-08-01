@@ -4,7 +4,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const jwt = require("jsonwebtoken");
-const port = process.env.PORT || 5000; 
+const port = process.env.PORT || 5000;
 
 //middleware
 app.use(cors());
@@ -27,10 +27,13 @@ async function run() {
       .db("knowledge-zone")
       .collection("blog-collection");
 
+    // for user collection (faisal)
+
+    const userCollection = client.db("knowledge-zone").collection("users");
+
     // for  class one to twelve database start
 
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
-    
 
     const ClassOneCourses = client
       .db("classOneToTwelve")
@@ -78,9 +81,6 @@ async function run() {
       res.send({ token });
     });
 
-
-
-
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
       res.send(result);
@@ -88,6 +88,20 @@ async function run() {
 
     app.get("/blogs", async (req, res) => {
       const result = await blogCollection.find().toArray();
+      res.send(result);
+    });
+
+    // for user collection (faisal)
+
+    app.put("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: user,
+      };
+      const result = await userCollection.updateOne(filter, updateDoc, options);
       res.send(result);
     });
 
@@ -152,9 +166,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-
   res.send("welcome to Knowledge Zone.....");
-
 });
 
 app.listen(port, () => {
