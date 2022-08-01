@@ -43,6 +43,8 @@ async function run() {
     const liveCourse=client.db("courses").collection("liveCourse");
     const specialCourse=client.db("courses").collection("specialCourse");
     const islamicCourse=client.db("courses").collection("islamicCourse");
+    const kidsCourse=client.db("courses").collection("kidsCourse");
+    const entertainCourse=client.db("courses").collection("entertainCourse");
 
     // for courses routes  start
       
@@ -136,6 +138,14 @@ async function run() {
     });
     app.get("/islamicCourse", async (req, res) => {
       const result = await islamicCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/kidsCourse", async (req, res) => {
+      const result = await kidsCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/entertainCourse", async (req, res) => {
+      const result = await entertainCourse.find().toArray();
       res.send(result);
     });
     // for course routes api create  end
