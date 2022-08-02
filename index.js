@@ -69,15 +69,6 @@ async function run() {
       .db("classOneToTwelve")
       .collection("classTwelve");
 
-    //when user sign in and login then get a token
-    app.put("/login/:email", async (req, res) => {
-      const email = req.params.email;
-      const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN, {
-        expiresIn: "2d",
-      });
-      res.send({ token });
-    });
-
 
 
 
