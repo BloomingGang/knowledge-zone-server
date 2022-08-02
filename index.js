@@ -136,7 +136,6 @@ async function run() {
     });
     // for course routes api create  end
     // done 
-    
 
 
   } finally {
