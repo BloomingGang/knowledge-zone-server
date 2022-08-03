@@ -47,42 +47,18 @@ async function run() {
 
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
 
-    const ClassOneCourses = client
-      .db("classOneToTwelve")
-      .collection("classOne");
-    const ClassTwoCourses = client
-      .db("classOneToTwelve")
-      .collection("classTwo");
-    const ClassThreeCourses = client
-      .db("classOneToTwelve")
-      .collection("classThree");
-    const ClassFourCourses = client
-      .db("classOneToTwelve")
-      .collection("classFour");
-    const ClassFiveCourses = client
-      .db("classOneToTwelve")
-      .collection("classFive");
-    const ClassSixCourses = client
-      .db("classOneToTwelve")
-      .collection("classSix");
-    const ClassSevenCourses = client
-      .db("classOneToTwelve")
-      .collection("classSeven");
-    const ClassEightCourses = client
-      .db("classOneToTwelve")
-      .collection("classEight");
-    const ClassNineCourses = client
-      .db("classOneToTwelve")
-      .collection("classNine");
-    const ClassTenCourses = client
-      .db("classOneToTwelve")
-      .collection("classTen");
-    const ClassElevenCourses = client
-      .db("classOneToTwelve")
-      .collection("classEleven");
-    const ClassTwelveCourses = client
-      .db("classOneToTwelve")
-      .collection("classTwelve");
+    const ClassOneCourses = client.db("classOneToTwelve").collection("classOne");
+    const ClassTwoCourses = client.db("classOneToTwelve").collection("classTwo");
+    const ClassThreeCourses = client.db("classOneToTwelve").collection("classThree");
+    const ClassFourCourses = client.db("classOneToTwelve").collection("classFour");
+    const ClassFiveCourses = client.db("classOneToTwelve").collection("classFive");
+    const ClassSixCourses = client.db("classOneToTwelve").collection("classSix");
+    const ClassSevenCourses = client.db("classOneToTwelve").collection("classSeven");
+    const ClassEightCourses = client.db("classOneToTwelve").collection("classEight");
+    const ClassNineCourses = client.db("classOneToTwelve").collection("classNine");
+    const ClassTenCourses = client.db("classOneToTwelve").collection("classTen");
+    const ClassElevenCourses = client.db("classOneToTwelve").collection("classEleven");
+    const ClassTwelveCourses = client.db("classOneToTwelve").collection("classTwelve");
 
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
