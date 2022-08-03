@@ -144,7 +144,7 @@ run().catch(console.dir);
 
 app.get("/", (req, res) => {
 
-  res.send("welcome to Knowledge Zone.....");
+  res.send("welcome to Knowledge Zone");
 
 });
 
