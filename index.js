@@ -40,7 +40,7 @@ async function run() {
       
 
 
-    app.get('/books', async (req, res) => {
+    app.get('/allBooks', async (req, res) => {
       const result = await booksCollection.find().toArray()
       res.send(result)
     })
