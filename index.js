@@ -3,6 +3,7 @@ const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 require("dotenv").config();
 const app = express();
+const jwt = require("jsonwebtoken");
 const port = process.env.PORT || 5000;
 
 //middleware
@@ -24,6 +25,7 @@ async function run() {
 
     // for  class one to twelve database start
 
+
     // for courses routes  start
 
     const freeCourse=client.db("courses").collection("freeCourse");
@@ -42,6 +44,51 @@ async function run() {
       const result = await booksCollection.find().toArray()
       res.send(result)
     })
+
+    const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
+
+    const ClassOneCourses = client
+      .db("classOneToTwelve")
+      .collection("classOne");
+    const ClassTwoCourses = client
+      .db("classOneToTwelve")
+      .collection("classTwo");
+    const ClassThreeCourses = client
+      .db("classOneToTwelve")
+      .collection("classThree");
+    const ClassFourCourses = client
+      .db("classOneToTwelve")
+      .collection("classFour");
+    const ClassFiveCourses = client
+      .db("classOneToTwelve")
+      .collection("classFive");
+    const ClassSixCourses = client
+      .db("classOneToTwelve")
+      .collection("classSix");
+    const ClassSevenCourses = client
+      .db("classOneToTwelve")
+      .collection("classSeven");
+    const ClassEightCourses = client
+      .db("classOneToTwelve")
+      .collection("classEight");
+    const ClassNineCourses = client
+      .db("classOneToTwelve")
+      .collection("classNine");
+    const ClassTenCourses = client
+      .db("classOneToTwelve")
+      .collection("classTen");
+    const ClassElevenCourses = client
+      .db("classOneToTwelve")
+      .collection("classEleven");
+    const ClassTwelveCourses = client
+      .db("classOneToTwelve")
+      .collection("classTwelve");
+
+    app.get("/books", async (req, res) => {
+      const result = await booksCollection.find().toArray();
+      res.send(result);
+    });
+
 
     app.get("/blogs", async (req, res) => {
       const result = await blogCollection.find().toArray();
@@ -146,9 +193,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-
-  res.send("welcome to Knowledge Zone.....");
-
+  res.send("welcome to Knowledge Zone.......");
 });
 
 app.listen(port, () => {
