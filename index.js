@@ -4,7 +4,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const jwt = require("jsonwebtoken");
-const port = process.env.PORT || 5000; 
+const port = process.env.PORT || 5000;
 
 //middleware
 app.use(cors());
@@ -30,7 +30,6 @@ async function run() {
     // for  class one to twelve database start
 
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
-    
 
     const ClassOneCourses = client
       .db("classOneToTwelve")
@@ -68,9 +67,6 @@ async function run() {
     const ClassTwelveCourses = client
       .db("classOneToTwelve")
       .collection("classTwelve");
-
-
-
 
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
@@ -143,9 +139,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-
-  res.send("welcome to Knowledge Zone.....");
-
+  res.send("welcome to Knowledge Zone.......");
 });
 
 app.listen(port, () => {
