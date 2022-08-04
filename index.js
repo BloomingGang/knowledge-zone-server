@@ -48,6 +48,23 @@ async function run() {
 
     // for  class one to twelve database start
 
+    // for courses routes  start
+
+    const freeCourse = client.db("courses").collection("freeCourse");
+    const discountCourse = client.db("courses").collection("discountCourse");
+    const liveCourse = client.db("courses").collection("liveCourse");
+    const specialCourse = client.db("courses").collection("specialCourse");
+    const islamicCourse = client.db("courses").collection("islamicCourse");
+    const kidsCourse = client.db("courses").collection("kidsCourse");
+    const entertainCourse = client.db("courses").collection("entertainCourse");
+
+    // for courses routes  start
+
+    app.get("/books", async (req, res) => {
+      const result = await booksCollection.find().toArray();
+      res.send(result);
+    });
+
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
 
     const ClassOneCourses = client
@@ -199,7 +216,39 @@ async function run() {
     });
 
     // for  class one to twelve end
-    // class one to twelve student api donegi
+    // class one to twelve student api done
+
+    // for course routes api create  start
+    app.get("/freeCourse", async (req, res) => {
+      const result = await freeCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/discountCourse", async (req, res) => {
+      const result = await discountCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/freeCourse", async (req, res) => {
+      const result = await liveCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/specialCourse", async (req, res) => {
+      const result = await specialCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/islamicCourse", async (req, res) => {
+      const result = await islamicCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/kidsCourse", async (req, res) => {
+      const result = await kidsCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/entertainCourse", async (req, res) => {
+      const result = await entertainCourse.find().toArray();
+      res.send(result);
+    });
+    // for course routes api create  end
+    // done
   } finally {
     //   await client.close();
   }
@@ -207,7 +256,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("welcome to Knowledge Zone.....");
+  res.send("welcome to Knowledge Zone.......");
 });
 
 app.listen(port, () => {
