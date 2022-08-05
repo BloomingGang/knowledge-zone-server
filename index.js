@@ -229,7 +229,7 @@ async function run() {
       const result = await discountCourse.find().toArray();
       res.send(result);
     });
-    app.get("/freeCourse", async (req, res) => {
+    app.get("/liveCourse", async (req, res) => {
       const result = await liveCourse.find().toArray();
       res.send(result);
     });
