@@ -227,7 +227,7 @@ async function run() {
       const result = await discountCourse.find().toArray();
       res.send(result);
     });
-    app.get("/freeCourse", async (req, res) => {
+    app.get("/liveCourse", async (req, res) => {
       const result = await liveCourse.find().toArray();
       res.send(result);
     });
@@ -256,9 +256,13 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
+
   res.send("welcome to Knowledge Zone.aa");
+
+
 });
 
 app.listen(port, () => {
   console.log("listening to port", port);
 });
+// https://immense-meadow-70411.herokuapp.com/
