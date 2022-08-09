@@ -67,7 +67,7 @@ async function run() {
 
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const payment = await freeCourse.findOne(query);
+      const payment = await booksCollection.findOne(query);
       res.send(payment);
     });
 
