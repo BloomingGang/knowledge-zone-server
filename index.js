@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const jwt = require("jsonwebtoken");
@@ -65,6 +65,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/book/:id", async (req, res) => {
+      const { id } = req.params;
+      const queary = { _id: ObjectId(id) };
+      const result = await booksCollection.findOne(queary);
+      res.send(result);
+    });
+
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
 
     const ClassOneCourses = client
@@ -111,6 +118,12 @@ async function run() {
 
     app.get("/blogs", async (req, res) => {
       const result = await blogCollection.find().toArray();
+      res.send(result);
+    });
+    app.get("/blog/:id", async (req, res) => {
+      const { id } = req.params;
+      const queary = { _id: ObjectId(id) };
+      const result = await blogCollection.findOne(queary);
       res.send(result);
     });
 
@@ -256,10 +269,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-
   res.send("welcome to Knowledge Zone.aa");
-
-
 });
 
 app.listen(port, () => {
