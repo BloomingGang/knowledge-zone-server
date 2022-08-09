@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const jwt = require("jsonwebtoken");
@@ -57,6 +57,14 @@ async function run() {
     const islamicCourse = client.db("courses").collection("islamicCourse");
     const kidsCourse = client.db("courses").collection("kidsCourse");
     const entertainCourse = client.db("courses").collection("entertainCourse");
+
+    //get detail for payment
+    app.get('/payment/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query={_id:ObjectId(id)}
+      const payment = await freeCourse.findOne(query)
+      res.send(payment)
+    })
 
     // for courses routes  start
 
