@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const jwt = require("jsonwebtoken");
@@ -219,6 +219,19 @@ async function run() {
 
     // for  class one to twelve end
     // class one to twelve student api done
+
+
+    // single course info get start
+
+    app.get("/one/:id",async(req,res)=>{
+      const {id}=req.params;
+      const query={_id:ObjectId(id)};
+      const result=await ClassOneCourses.findOne(query);
+      res.send(result);
+
+    })
+    // singe course info get end
+
 
     // for course routes api create  start
     app.get("/freeCourse", async (req, res) => {
