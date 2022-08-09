@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const jwt = require("jsonwebtoken");
@@ -35,6 +35,8 @@ function verifyJwt(req, res, next) {
 async function run() {
   try {
     await client.connect();
+    console.log("DB connection successful.");
+
     const booksCollection = client
       .db("knowledge-zone")
       .collection("books-collection");
@@ -43,13 +45,10 @@ async function run() {
       .collection("blog-collection");
 
     // for user collection (faisal)
-
     const userCollection = client.db("knowledge-zone").collection("users");
 
     // for  class one to twelve database start
-
     // for courses routes  start
-
     const freeCourse = client.db("courses").collection("freeCourse");
     const discountCourse = client.db("courses").collection("discountCourse");
     const liveCourse = client.db("courses").collection("liveCourse");
@@ -59,14 +58,12 @@ async function run() {
     const entertainCourse = client.db("courses").collection("entertainCourse");
 
     // for courses routes  start
-
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
       res.send(result);
     });
 
-    const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
-
+    // const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
     const ClassOneCourses = client
       .db("classOneToTwelve")
       .collection("classOne");
@@ -110,12 +107,11 @@ async function run() {
     });
 
     app.get("/blogs", async (req, res) => {
-      const result = await blogCollection.find().toArray();
+      const result = await blogCollection.find({}).toArray();
       res.send(result);
     });
 
     // for user collection (faisal)
-
     app.get("/user", verifyJwt, async (req, res) => {
       const users = await userCollection.find().toArray();
       res.send(users);
@@ -217,7 +213,6 @@ async function run() {
 
     // for  class one to twelve end
     // class one to twelve student api done
-
     // for course routes api create  start
     app.get("/freeCourse", async (req, res) => {
       const result = await freeCourse.find().toArray();
@@ -249,6 +244,145 @@ async function run() {
     });
     // for course routes api create  end
     // done
+
+    /**
+     * ==================================
+     * Counts I've conduct about:
+     * Users ***
+     * Blogs
+     * Books
+     * Courses
+     * Classes
+     */
+
+    /* ----------Users---------- */
+    app.get("/userCount", async (req, res) => {
+      const count = await userCollection.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+
+    /* ----------Blogs---------- */
+    app.get("/blogsCount", async (req, res) => {
+      const query = { state: "unread" };
+      // const count = await blogCollection.estimatedDocumentCount();
+      const count = await blogCollection.countDocuments(query);
+      res.status(201).send({ count });
+    })
+
+    /* ----------Books---------- */
+    app.get("/booksCount", async (req, res) => {
+      const query = { state: "unread" };
+      // const count = await booksCollection.estimatedDocumentCount();
+      const count = await booksCollection.countDocuments(query);
+      res.status(201).send({ count });
+    })
+
+    /* ----------Classes---------- */
+    app.get("/classOneCoursesCount", async (req, res) => {
+      const count = await ClassOneCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classTwoCoursesCount", async (req, res) => {
+      const count = await ClassTwoCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classThreeCoursesCount", async (req, res) => {
+      const count = await ClassThreeCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classFourCoursesCount", async (req, res) => {
+      const count = await ClassFourCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classFiveCoursesCount", async (req, res) => {
+      const count = await ClassFiveCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classSixCoursesCount", async (req, res) => {
+      const count = await ClassSixCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classSevenCoursesCount", async (req, res) => {
+      const count = await ClassSevenCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classEightCoursesCount", async (req, res) => {
+      const count = await ClassEightCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classNineCoursesCount", async (req, res) => {
+      const count = await ClassNineCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classTenCoursesCount", async (req, res) => {
+      const count = await ClassTenCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classElevenCoursesCount", async (req, res) => {
+      const count = await ClassElevenCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+    app.get("/classTwelveCoursesCount", async (req, res) => {
+      const count = await ClassTwelveCourses.estimatedDocumentCount();
+      res.status(201).send({ count });
+    })
+
+    /* ----------Courses---------- */
+    app.get("/islamicCourseCount", async (req, res) => {
+      const count = await islamicCourse.estimatedDocumentCount();
+      res.status(201).send({ count });
+    });
+    app.get("/freeCourseCount", async (req, res) => {
+      const count = await freeCourse.estimatedDocumentCount();
+      res.status(201).send({ count });
+    });
+    app.get("/discountCourseCount", async (req, res) => {
+      const count = await discountCourse.estimatedDocumentCount();
+      res.status(201).send({ count });
+    });
+    app.get("/liveCourseCount", async (req, res) => {
+      const count = await liveCourse.estimatedDocumentCount();
+      res.status(201).send({ count });
+    });
+    app.get("/specialCourseCount", async (req, res) => {
+      const count = await specialCourse.estimatedDocumentCount();
+      res.status(201).send({ count });
+    });
+    app.get("/kidsCourseCount", async (req, res) => {
+      const count = await kidsCourse.estimatedDocumentCount();
+      res.status(201).send({ count });
+    });
+    app.get("/entertainCourseCount", async (req, res) => {
+      const count = await entertainCourse.estimatedDocumentCount();
+      res.status(201).send({ count });
+    });
+
+    /**
+     * blog: put method
+     * book: put method
+     */
+    app.put("/blog/:id", async (req, res) => {
+      const id = req.params.id;
+      const body = req.body;
+      const filter = { _id: ObjectId(id) };
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: body,
+      }
+      const result = await blogCollection.updateOne(filter, updateDoc, option);
+      res.status(200).send(result);
+    })
+    app.put("/book/:id", async (req, res) => {
+      const id = req.params.id;
+      const body = req.body;
+      const filter = { _id: ObjectId(id) };
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: body,
+      }
+      const result = await booksCollection.updateOne(filter, updateDoc, option);
+      res.status(200).send(result);
+    })
   } finally {
     //   await client.close();
   }
@@ -256,13 +390,11 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-
   res.send("welcome to Knowledge Zone.aa");
-
-
 });
 
 app.listen(port, () => {
   console.log("listening to port", port);
 });
+
 // https://immense-meadow-70411.herokuapp.com/
