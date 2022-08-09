@@ -59,12 +59,12 @@ async function run() {
     const entertainCourse = client.db("courses").collection("entertainCourse");
 
     //get detail for payment
-    app.get('/payment/:id', async(req,res)=>{
+    app.get("/payment/:id", async (req, res) => {
       const id = req.params.id;
-      const query={_id:ObjectId(id)}
-      const payment = await freeCourse.findOne(query)
-      res.send(payment)
-    })
+      const query = { _id: ObjectId(id) };
+      const payment = await freeCourse.findOne(query);
+      res.send(payment);
+    });
 
     // for courses routes  start
 
@@ -153,6 +153,35 @@ async function run() {
         res.status(403).send({ message: "Forbidden message" });
       }
     });
+
+    //=============== Update User Profile START By (Rafi) ===============
+    //========== Get User By Email (Rafi) ==========
+    app.get("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await userCollection.findOne(query);
+      res.send(result);
+    });
+
+    //========== Update User Profile (Rafi) ==========
+    app.put("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const profile = req.body;
+      const query = { email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          name: profile.name,
+          email: profile.email,
+          education: profile.education,
+          location: profile.location,
+          phone: profile.phone,
+        },
+      };
+      const result = await userCollection.updateOne(query, updateDoc, options);
+      res.send(result);
+    });
+    //=============== Update User Profile END By (Rafi) ===============
 
     app.put("/user/:email", async (req, res) => {
       const email = req.params.email;
@@ -264,13 +293,14 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-
   res.send("welcome to Knowledge Zone.aa");
-
-
 });
 
 app.listen(port, () => {
   console.log("listening to port", port);
 });
+
+
+
+// Heroku Link is given below:
 // https://immense-meadow-70411.herokuapp.com/
