@@ -5,6 +5,7 @@ require("dotenv").config();
 const app = express();
 const jwt = require("jsonwebtoken");
 const port = process.env.PORT || 5000;
+const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
 
 //middleware
 app.use(cors());
@@ -42,11 +43,11 @@ async function run() {
       .db("knowledge-zone")
       .collection("blog-collection");
 
+      const orderCollection = client.db("knowledge-zone").collection("order");
+
     // for user collection (faisal)
 
     const userCollection = client.db("knowledge-zone").collection("users");
-
-    // for  class one to twelve database start
 
     // for courses routes  start
 
@@ -58,7 +59,27 @@ async function run() {
     const kidsCourse = client.db("courses").collection("kidsCourse");
     const entertainCourse = client.db("courses").collection("entertainCourse");
 
-    // for courses routes  start
+    //get detail for payment
+
+    app.get("/payment/:id", verifyJwt, async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const payment = await booksCollection.findOne(query);
+      res.send(payment);
+    });
+
+    //payment
+    app.post("/create-payment-intent", verifyJwt, async (req, res) => {
+      const service = req.body;
+      const price = service.price;
+      const amount = price * 100;
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        payment_method_types: ["card"],
+      });
+      res.send({ clientSecret: paymentIntent.client_secret });
+    });
 
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
@@ -127,6 +148,13 @@ async function run() {
       res.send(result);
     });
 
+    // insert a order
+    app.post("/order", async (req, res) => {
+      const order = req.body;
+      const result = await orderCollection.insertOne(order);
+      res.send(result);
+    });
+
     // for user collection (faisal)
 
     app.get("/user", verifyJwt, async (req, res) => {
@@ -158,6 +186,35 @@ async function run() {
         res.status(403).send({ message: "Forbidden message" });
       }
     });
+
+    //=============== Update User Profile START By (Rafi) ===============
+    //========== Get User By Email (Rafi) ==========
+    app.get("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await userCollection.findOne(query);
+      res.send(result);
+    });
+
+    //========== Update User Profile (Rafi) ==========
+    app.put("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const profile = req.body;
+      const query = { email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          name: profile.name,
+          email: profile.email,
+          education: profile.education,
+          location: profile.location,
+          phone: profile.phone,
+        },
+      };
+      const result = await userCollection.updateOne(query, updateDoc, options);
+      res.send(result);
+    });
+    //=============== Update User Profile END By (Rafi) ===============
 
     app.put("/user/:email", async (req, res) => {
       const email = req.params.email;
@@ -275,4 +332,10 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log("listening to port", port);
 });
+
+
+
+
+// Heroku Link is given below:
+
 // https://immense-meadow-70411.herokuapp.com/
