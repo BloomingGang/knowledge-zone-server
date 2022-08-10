@@ -91,6 +91,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/book/:id", async (req, res) => {
+      const { id } = req.params;
+      const queary = { _id: ObjectId(id) };
+      const result = await booksCollection.findOne(queary);
+      res.send(result);
+    });
+
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
 
     const ClassOneCourses = client
@@ -137,6 +144,12 @@ async function run() {
 
     app.get("/blogs", async (req, res) => {
       const result = await blogCollection.find().toArray();
+      res.send(result);
+    });
+    app.get("/blog/:id", async (req, res) => {
+      const { id } = req.params;
+      const queary = { _id: ObjectId(id) };
+      const result = await blogCollection.findOne(queary);
       res.send(result);
     });
 
@@ -320,5 +333,7 @@ app.listen(port, () => {
 
 
 
+
 // Heroku Link is given below:
+
 // https://immense-meadow-70411.herokuapp.com/
