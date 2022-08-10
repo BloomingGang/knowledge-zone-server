@@ -43,11 +43,11 @@ async function run() {
       .db("knowledge-zone")
       .collection("blog-collection");
 
+      const orderCollection = client.db("knowledge-zone").collection("order");
+
     // for user collection (faisal)
 
     const userCollection = client.db("knowledge-zone").collection("users");
-
-   
 
     // for courses routes  start
 
@@ -61,10 +61,7 @@ async function run() {
 
     //get detail for payment
 
-
-
     app.get("/payment/:id", verifyJwt, async (req, res) => {
-
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const payment = await booksCollection.findOne(query);
@@ -83,8 +80,6 @@ async function run() {
       });
       res.send({ clientSecret: paymentIntent.client_secret });
     });
-
-
 
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
@@ -150,6 +145,13 @@ async function run() {
       const { id } = req.params;
       const queary = { _id: ObjectId(id) };
       const result = await blogCollection.findOne(queary);
+      res.send(result);
+    });
+
+    // insert a order
+    app.post("/order", async (req, res) => {
+      const order = req.body;
+      const result = await orderCollection.insertOne(order);
       res.send(result);
     });
 
