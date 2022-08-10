@@ -47,7 +47,7 @@ async function run() {
 
     const userCollection = client.db("knowledge-zone").collection("users");
 
-    // for  class one to twelve database start
+   
 
     // for courses routes  start
 
