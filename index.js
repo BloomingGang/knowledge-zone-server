@@ -149,7 +149,7 @@ async function run() {
     });
 
     // insert a order
-    app.post("/order",verifyJwt, async (req, res) => {
+    app.post("/order", async (req, res) => {
       const order = req.body;
       const result = await orderCollection.insertOne(order);
       res.send(result);
@@ -197,7 +197,7 @@ async function run() {
     });
 
     //========== Update User Profile (Rafi) ==========
-    app.put("/user/:email", async (req, res) => {
+    app.put("/users/:email", async (req, res) => {
       const email = req.params.email;
       const profile = req.body;
       const query = { email };
