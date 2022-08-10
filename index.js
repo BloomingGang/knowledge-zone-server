@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const jwt = require("jsonwebtoken");
@@ -65,6 +65,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/book/:id", async (req, res) => {
+      const { id } = req.params;
+      const queary = { _id: ObjectId(id) };
+      const result = await booksCollection.findOne(queary);
+      res.send(result);
+    });
+
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
 
     const ClassOneCourses = client
@@ -113,6 +120,12 @@ async function run() {
       const result = await blogCollection.find().toArray();
       res.send(result);
     });
+    app.get("/blog/:id", async (req, res) => {
+      const { id } = req.params;
+      const queary = { _id: ObjectId(id) };
+      const result = await blogCollection.findOne(queary);
+      res.send(result);
+    });
 
     // for user collection (faisal)
 
@@ -120,8 +133,6 @@ async function run() {
       const users = await userCollection.find().toArray();
       res.send(users);
     });
-
-    // for admin
 
     app.get("/admin/:email", async (req, res) => {
       const email = req.params.email;
@@ -229,7 +240,7 @@ async function run() {
       const result = await discountCourse.find().toArray();
       res.send(result);
     });
-    app.get("/freeCourse", async (req, res) => {
+    app.get("/liveCourse", async (req, res) => {
       const result = await liveCourse.find().toArray();
       res.send(result);
     });
@@ -258,9 +269,10 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("welcome to Knowledge Zone.......");
+  res.send("welcome to Knowledge Zone.aa");
 });
 
 app.listen(port, () => {
   console.log("listening to port", port);
 });
+// https://immense-meadow-70411.herokuapp.com/
