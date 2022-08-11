@@ -5,6 +5,7 @@ require("dotenv").config();
 const app = express();
 const jwt = require("jsonwebtoken");
 const port = process.env.PORT || 5000;
+const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
 
 //middleware
 app.use(cors());
@@ -35,50 +36,101 @@ function verifyJwt(req, res, next) {
 async function run() {
   try {
     await client.connect();
+    const booksCollection = client
+      .db("knowledge-zone")
+      .collection("books-collection");
+    const blogCollection = client
+      .db("knowledge-zone")
+      .collection("blog-collection");
 
-      //  class one_to_twelve and courses routes database start
-      const classAndCourse = client.db("classes_courses_info").collection("allClassesCoursesInfo");
-      //  class one_to_twelve and courses routes database end
-
-      
-    const booksCollection = client.db("knowledge-zone").collection("books-collection");
-    const blogCollection = client.db("knowledge-zone").collection("blog-collection");
+    const orderCollection = client.db("knowledge-zone").collection("order");
 
     // for user collection (faisal)
 
     const userCollection = client.db("knowledge-zone").collection("users");
 
-   
+    // for courses routes  start
+
+    const freeCourse = client.db("courses").collection("freeCourse");
+    const discountCourse = client.db("courses").collection("discountCourse");
+    const liveCourse = client.db("courses").collection("liveCourse");
+    const specialCourse = client.db("courses").collection("specialCourse");
+    const islamicCourse = client.db("courses").collection("islamicCourse");
+    const kidsCourse = client.db("courses").collection("kidsCourse");
+    const entertainCourse = client.db("courses").collection("entertainCourse");
+
+    //get detail for payment
+
+    app.get("/payment/:id", verifyJwt, async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const payment = await booksCollection.findOne(query);
+      res.send(payment);
+    });
+
+    //payment
+    app.post("/create-payment-intent", verifyJwt, async (req, res) => {
+      const service = req.body;
+      const price = service.price;
+      const amount = price * 100;
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        payment_method_types: ["card"],
+      });
+      res.send({ clientSecret: paymentIntent.client_secret });
+    });
 
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
       res.send(result);
     });
-  
 
-    // create api for get class and courses information 
-    app.get("/courses/:course",async(req,res)=>{
-      const course=req.params.course;
-      console.log(course);
-      const query={classCourse:course};
-      const result=await classAndCourse.find(query).toArray();
-      res.send(result);
-    }) 
-    // after click enroll from course or class route 
-    app.get("/course/:id",async(req,res)=>{
-      const {id}=req.params;
-      const query={_id:ObjectId(id)};
-      const result=await classAndCourse.findOne(query);
-      res.send(result);
-
-    })
     app.get("/book/:id", async (req, res) => {
       const { id } = req.params;
       const queary = { _id: ObjectId(id) };
       const result = await booksCollection.findOne(queary);
       res.send(result);
     });
+
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
+
+    const ClassOneCourses = client
+      .db("classOneToTwelve")
+      .collection("classOne");
+    const ClassTwoCourses = client
+      .db("classOneToTwelve")
+      .collection("classTwo");
+    const ClassThreeCourses = client
+      .db("classOneToTwelve")
+      .collection("classThree");
+    const ClassFourCourses = client
+      .db("classOneToTwelve")
+      .collection("classFour");
+    const ClassFiveCourses = client
+      .db("classOneToTwelve")
+      .collection("classFive");
+    const ClassSixCourses = client
+      .db("classOneToTwelve")
+      .collection("classSix");
+    const ClassSevenCourses = client
+      .db("classOneToTwelve")
+      .collection("classSeven");
+    const ClassEightCourses = client
+      .db("classOneToTwelve")
+      .collection("classEight");
+    const ClassNineCourses = client
+      .db("classOneToTwelve")
+      .collection("classNine");
+    const ClassTenCourses = client
+      .db("classOneToTwelve")
+      .collection("classTen");
+    const ClassElevenCourses = client
+      .db("classOneToTwelve")
+      .collection("classEleven");
+    const ClassTwelveCourses = client
+      .db("classOneToTwelve")
+      .collection("classTwelve");
 
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
@@ -93,6 +145,31 @@ async function run() {
       const { id } = req.params;
       const queary = { _id: ObjectId(id) };
       const result = await blogCollection.findOne(queary);
+      res.send(result);
+    });
+
+    // insert a order
+    app.post("/order", async (req, res) => {
+      const order = req.body;
+      const result = await orderCollection.insertOne(order);
+      res.send(result);
+    });
+
+    // GET user order by filtering email (faisal)
+
+    app.get("/order", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = orderCollection.find(query);
+      const orders = await cursor.toArray();
+      res.send(orders);
+    });
+
+    // DELETE user's order (faisal)
+    app.delete("/order/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await orderCollection.deleteOne(query);
       res.send(result);
     });
 
@@ -128,6 +205,35 @@ async function run() {
       }
     });
 
+    //=============== Update User Profile START By (Rafi) ===============
+    //========== Get User By Email (Rafi) ==========
+    app.get("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await userCollection.findOne(query);
+      res.send(result);
+    });
+
+    //========== Update User Profile (Rafi) ==========
+    app.put("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const profile = req.body;
+      const query = { email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          name: profile.name,
+          email: profile.email,
+          education: profile.education,
+          location: profile.location,
+          phone: profile.phone,
+        },
+      };
+      const result = await userCollection.updateOne(query, updateDoc, options);
+      res.send(result);
+    });
+    //=============== Update User Profile END By (Rafi) ===============
+
     app.put("/user/:email", async (req, res) => {
       const email = req.params.email;
       const user = req.body;
@@ -145,8 +251,92 @@ async function run() {
       res.send({ result, token });
     });
 
+    // for  class one to twelve start
+    app.get("/classOne", async (req, res) => {
+      const result = await ClassOneCourses.find().toArray();
+      res.send(result);
+    });
 
- 
+    app.get("/classTwo", async (req, res) => {
+      const result = await ClassTwoCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classThree", async (req, res) => {
+      const result = await ClassThreeCourses.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/classFour", async (req, res) => {
+      const result = await ClassFourCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classFive", async (req, res) => {
+      const result = await ClassFiveCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classSix", async (req, res) => {
+      const result = await ClassSixCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classSeven", async (req, res) => {
+      const result = await ClassSevenCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classEight", async (req, res) => {
+      const result = await ClassEightCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classNine", async (req, res) => {
+      const result = await ClassNineCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classTen", async (req, res) => {
+      const result = await ClassTenCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classEleven", async (req, res) => {
+      const result = await ClassElevenCourses.find().toArray();
+      res.send(result);
+    });
+    app.get("/classTwelve", async (req, res) => {
+      const result = await ClassTwelveCourses.find().toArray();
+      res.send(result);
+    });
+
+    // for  class one to twelve end
+    // class one to twelve student api done
+
+    // for course routes api create  start
+    app.get("/freeCourse", async (req, res) => {
+      const result = await freeCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/discountCourse", async (req, res) => {
+      const result = await discountCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/liveCourse", async (req, res) => {
+      const result = await liveCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/specialCourse", async (req, res) => {
+      const result = await specialCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/islamicCourse", async (req, res) => {
+      const result = await islamicCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/kidsCourse", async (req, res) => {
+      const result = await kidsCourse.find().toArray();
+      res.send(result);
+    });
+    app.get("/entertainCourse", async (req, res) => {
+      const result = await entertainCourse.find().toArray();
+      res.send(result);
+    });
+    // for course routes api create  end
+
     // done
   } finally {
     //   await client.close();
@@ -161,4 +351,7 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log("listening to port", port);
 });
+
+// Heroku Link is given below:
+
 // https://immense-meadow-70411.herokuapp.com/
