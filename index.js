@@ -45,7 +45,7 @@ async function run() {
     const booksCollection = client.db("knowledge-zone").collection("books-collection");
     const blogCollection = client.db("knowledge-zone").collection("blog-collection");
 
-      const orderCollection = client.db("knowledge-zone").collection("order");
+    const orderCollection = client.db("knowledge-zone").collection("order");
 
     // for user collection (faisal)
 
@@ -137,6 +137,24 @@ async function run() {
     app.post("/order", async (req, res) => {
       const order = req.body;
       const result = await orderCollection.insertOne(order);
+      res.send(result);
+    });
+
+    // GET user order by filtering email (faisal)
+
+    app.get("/order", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = orderCollection.find(query);
+      const orders = await cursor.toArray();
+      res.send(orders);
+    });
+
+    // DELETE user's order (faisal)
+    app.delete("/order/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await orderCollection.deleteOne(query);
       res.send(result);
     });
 
@@ -253,9 +271,6 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log("listening to port", port);
 });
-
-
-
 
 // Heroku Link is given below:
 
