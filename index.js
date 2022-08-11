@@ -74,8 +74,8 @@ async function run() {
     })
     app.get("/book/:id", async (req, res) => {
       const { id } = req.params;
-      const queary = { _id: ObjectId(id) };
-      const result = await booksCollection.findOne(queary);
+      const query = { _id: ObjectId(id) };
+      const result = await booksCollection.findOne(query);
       res.send(result);
     });
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
