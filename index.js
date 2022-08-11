@@ -146,25 +146,6 @@ async function run() {
     });
 
 
-    // single course info get start
-
-    // app.get("/classOne/:id",async(req,res)=>{
-    //   const {id}=req.params;
-    //   const query={_id:ObjectId(id)};
-    //   const result=await ClassOneCourses.findOne(query);
-    //   res.send(result);
-
-    // })
-    // app.get("/classTwo/:id",async(req,res)=>{
-    //   const {id}=req.params;
-    //   const query={_id:ObjectId(id)};
-    //   const result=await ClassTwoCourses.findOne(query);
-    //   res.send(result);
-
-    // })
-    // // singe course info get end
-
-
  
     // done
   } finally {
