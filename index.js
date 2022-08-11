@@ -35,81 +35,50 @@ function verifyJwt(req, res, next) {
 async function run() {
   try {
     await client.connect();
-    const booksCollection = client
-      .db("knowledge-zone")
-      .collection("books-collection");
-    const blogCollection = client
-      .db("knowledge-zone")
-      .collection("blog-collection");
+
+      //  class one_to_twelve and courses routes database start
+      const classAndCourse = client.db("classes_courses_info").collection("allClassesCoursesInfo");
+      //  class one_to_twelve and courses routes database end
+
+      
+    const booksCollection = client.db("knowledge-zone").collection("books-collection");
+    const blogCollection = client.db("knowledge-zone").collection("blog-collection");
 
     // for user collection (faisal)
 
     const userCollection = client.db("knowledge-zone").collection("users");
 
-    // for  class one to twelve database start
-
-    // for courses routes  start
-
-    const freeCourse = client.db("courses").collection("freeCourse");
-    const discountCourse = client.db("courses").collection("discountCourse");
-    const liveCourse = client.db("courses").collection("liveCourse");
-    const specialCourse = client.db("courses").collection("specialCourse");
-    const islamicCourse = client.db("courses").collection("islamicCourse");
-    const kidsCourse = client.db("courses").collection("kidsCourse");
-    const entertainCourse = client.db("courses").collection("entertainCourse");
-
-    // for courses routes  start
+   
 
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
       res.send(result);
     });
+  
 
+    // create api for get class and courses information 
+    app.get("/courses/:course",async(req,res)=>{
+      const course=req.params.course;
+      console.log(course);
+      const query={classCourse:course};
+      const result=await classAndCourse.find(query).toArray();
+      res.send(result);
+    }) 
+    // after click enroll from course or class route 
+    app.get("/course/:id",async(req,res)=>{
+      const {id}=req.params;
+      const query={_id:ObjectId(id)};
+      const result=await classAndCourse.findOne(query);
+      res.send(result);
+
+    })
     app.get("/book/:id", async (req, res) => {
       const { id } = req.params;
       const queary = { _id: ObjectId(id) };
       const result = await booksCollection.findOne(queary);
       res.send(result);
     });
-
     const ClassOneCourse = client.db("classOneToTwelve").collection("classOne");
-
-    const ClassOneCourses = client
-      .db("classOneToTwelve")
-      .collection("classOne");
-    const ClassTwoCourses = client
-      .db("classOneToTwelve")
-      .collection("classTwo");
-    const ClassThreeCourses = client
-      .db("classOneToTwelve")
-      .collection("classThree");
-    const ClassFourCourses = client
-      .db("classOneToTwelve")
-      .collection("classFour");
-    const ClassFiveCourses = client
-      .db("classOneToTwelve")
-      .collection("classFive");
-    const ClassSixCourses = client
-      .db("classOneToTwelve")
-      .collection("classSix");
-    const ClassSevenCourses = client
-      .db("classOneToTwelve")
-      .collection("classSeven");
-    const ClassEightCourses = client
-      .db("classOneToTwelve")
-      .collection("classEight");
-    const ClassNineCourses = client
-      .db("classOneToTwelve")
-      .collection("classNine");
-    const ClassTenCourses = client
-      .db("classOneToTwelve")
-      .collection("classTen");
-    const ClassElevenCourses = client
-      .db("classOneToTwelve")
-      .collection("classEleven");
-    const ClassTwelveCourses = client
-      .db("classOneToTwelve")
-      .collection("classTwelve");
 
     app.get("/books", async (req, res) => {
       const result = await booksCollection.find().toArray();
@@ -176,91 +145,27 @@ async function run() {
       res.send({ result, token });
     });
 
-    // for  class one to twelve start
-    app.get("/classOne", async (req, res) => {
-      const result = await ClassOneCourses.find().toArray();
-      res.send(result);
-    });
 
-    app.get("/classTwo", async (req, res) => {
-      const result = await ClassTwoCourses.find().toArray();
-      res.send(result);
-    });
-    app.get("/classThree", async (req, res) => {
-      const result = await ClassThreeCourses.find().toArray();
-      res.send(result);
-    });
+    // single course info get start
 
-    app.get("/classFour", async (req, res) => {
-      const result = await ClassFourCourses.find().toArray();
-      res.send(result);
-    });
-    app.get("/classFive", async (req, res) => {
-      const result = await ClassFiveCourses.find().toArray();
-      res.send(result);
-    });
-    app.get("/classSix", async (req, res) => {
-      const result = await ClassSixCourses.find().toArray();
-      res.send(result);
-    });
-    app.get("/classSeven", async (req, res) => {
-      const result = await ClassSevenCourses.find().toArray();
-      res.send(result);
-    });
-    app.get("/classEight", async (req, res) => {
-      const result = await ClassEightCourses.find().toArray();
-      res.send(result);
-    });
-    app.get("/classNine", async (req, res) => {
-      const result = await ClassNineCourses.find().toArray();
-      res.send(result);
-    });
-    app.get("/classTen", async (req, res) => {
-      const result = await ClassTenCourses.find().toArray();
-      res.send(result);
-    });
-    app.get("/classEleven", async (req, res) => {
-      const result = await ClassElevenCourses.find().toArray();
-      res.send(result);
-    });
-    app.get("/classTwelve", async (req, res) => {
-      const result = await ClassTwelveCourses.find().toArray();
-      res.send(result);
-    });
+    // app.get("/classOne/:id",async(req,res)=>{
+    //   const {id}=req.params;
+    //   const query={_id:ObjectId(id)};
+    //   const result=await ClassOneCourses.findOne(query);
+    //   res.send(result);
 
-    // for  class one to twelve end
-    // class one to twelve student api done
+    // })
+    // app.get("/classTwo/:id",async(req,res)=>{
+    //   const {id}=req.params;
+    //   const query={_id:ObjectId(id)};
+    //   const result=await ClassTwoCourses.findOne(query);
+    //   res.send(result);
 
-    // for course routes api create  start
-    app.get("/freeCourse", async (req, res) => {
-      const result = await freeCourse.find().toArray();
-      res.send(result);
-    });
-    app.get("/discountCourse", async (req, res) => {
-      const result = await discountCourse.find().toArray();
-      res.send(result);
-    });
-    app.get("/liveCourse", async (req, res) => {
-      const result = await liveCourse.find().toArray();
-      res.send(result);
-    });
-    app.get("/specialCourse", async (req, res) => {
-      const result = await specialCourse.find().toArray();
-      res.send(result);
-    });
-    app.get("/islamicCourse", async (req, res) => {
-      const result = await islamicCourse.find().toArray();
-      res.send(result);
-    });
-    app.get("/kidsCourse", async (req, res) => {
-      const result = await kidsCourse.find().toArray();
-      res.send(result);
-    });
-    app.get("/entertainCourse", async (req, res) => {
-      const result = await entertainCourse.find().toArray();
-      res.send(result);
-    });
-    // for course routes api create  end
+    // })
+    // // singe course info get end
+
+
+ 
     // done
   } finally {
     //   await client.close();
