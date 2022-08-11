@@ -72,6 +72,19 @@ async function run() {
       res.send(result);
 
     })
+    // delete a course
+    app.delete("/course/:id",async(req,res)=>{
+      const {id}=req.params;
+      const query={_id:ObjectId(id)};
+      const result=await classAndCourse.deleteOne(query);
+      res.send(result);
+
+    })
+
+
+
+
+
     app.get("/book/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
