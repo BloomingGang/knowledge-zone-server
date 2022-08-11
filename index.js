@@ -61,7 +61,7 @@ async function run() {
 
     //get detail for payment
 
-    app.get("/payment/:id", verifyJwt, async (req, res) => {
+    app.get("/payment/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const payment = await booksCollection.findOne(query);
