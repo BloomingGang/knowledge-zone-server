@@ -60,6 +60,19 @@ async function run() {
       res.send(result);
     });
 
+   // update a course
+   app.put('/courseUpdate/:id', async (req, res) => {
+    const updateCourse = req.body;
+    const {id} = req.params;
+    const filter = { _id: ObjectId(id) };
+    const option = { upsert: true };
+    const updateDoc = {
+        $set: updateCourse
+    }
+    const result = await classAndCourse.updateOne(filter, updateDoc, option);
+    res.send(result);
+});
+
 
     //get detail for payment
 
