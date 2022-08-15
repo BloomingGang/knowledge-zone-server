@@ -48,10 +48,18 @@ async function run() {
     // for user collection (faisal)
 
     const userCollection = client.db("knowledge-zone").collection("users");
-  //rakib mia
-     //  class one_to_twelve and courses routes database start
-     const classAndCourse = client.db("classes_courses_info").collection("allClassesCoursesInfo");
-     //  class one_to_twelve and courses routes database end
+    //  class one_to_twelve and courses routes database start
+    const classAndCourse = client.db("classes_courses_info").collection("allClassesCoursesInfo");
+    //  class one_to_twelve and courses routes database end
+
+    // add course 
+    // add a product api
+    app.post('/addCourse', async (req, res) => {
+      const course = req.body;
+      const result = await classAndCourse.insertOne(course);
+      res.send(result);
+    });
+
 
     //get detail for payment
 
@@ -81,26 +89,26 @@ async function run() {
     });
 
     // create api for get class and courses information 
-    app.get("/courses/:course",async(req,res)=>{
-      const course=req.params.course;
+    app.get("/courses/:course", async (req, res) => {
+      const course = req.params.course;
       console.log(course);
-      const query={classCourse:course};
-      const result=await classAndCourse.find(query).toArray();
+      const query = { classCourse: course };
+      const result = await classAndCourse.find(query).toArray();
       res.send(result);
-    }) 
+    })
     // after click enroll from course or class route 
-    app.get("/course/:id",async(req,res)=>{
-      const {id}=req.params;
-      const query={_id:ObjectId(id)};
-      const result=await classAndCourse.findOne(query);
+    app.get("/course/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await classAndCourse.findOne(query);
       res.send(result);
 
     })
     // delete a course
-    app.delete("/course/:id",async(req,res)=>{
-      const {id}=req.params;
-      const query={_id:ObjectId(id)};
-      const result=await classAndCourse.deleteOne(query);
+    app.delete("/course/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await classAndCourse.deleteOne(query);
       res.send(result);
 
     })
