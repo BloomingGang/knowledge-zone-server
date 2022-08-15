@@ -58,7 +58,7 @@ async function run() {
     app.get("/payment/:id", verifyJwt, async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const payment = await booksCollection.findOne(query);
+      const payment = await orderCollection.findOne(query);
       res.send(payment);
     });
 
@@ -239,7 +239,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("welcome to Knowledge Zone.aa");
+  res.send("welcome to Knowledge Zone......");
 });
 
 app.listen(port, () => {
