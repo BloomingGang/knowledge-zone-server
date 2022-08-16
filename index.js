@@ -51,19 +51,40 @@ async function run() {
     // for user collection (faisal)
 
     const userCollection = client.db("knowledge-zone").collection("users");
-    //rakib
+
     //  class one_to_twelve and courses routes database start
     const classAndCourse = client
       .db("classes_courses_info")
       .collection("allClassesCoursesInfo");
     //  class one_to_twelve and courses routes database end
 
+    // add course
+    // add a product api
+    app.post("/addCourse", async (req, res) => {
+      const course = req.body;
+      const result = await classAndCourse.insertOne(course);
+      res.send(result);
+    });
+
+    // update a course
+    app.put("/courseUpdate/:id", async (req, res) => {
+      const updateCourse = req.body;
+      const { id } = req.params;
+      const filter = { _id: ObjectId(id) };
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: updateCourse,
+      };
+      const result = await classAndCourse.updateOne(filter, updateDoc, option);
+      res.send(result);
+    });
+
     //get detail for payment
 
     app.get("/payment/:id", verifyJwt, async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const payment = await booksCollection.findOne(query);
+      const payment = await orderCollection.findOne(query);
       res.send(payment);
     });
 
@@ -86,6 +107,7 @@ async function run() {
     });
 
     // create api for get class and courses information
+
     app.get("/courses/:course", async (req, res) => {
       const course = req.params.course;
       console.log(course);
@@ -94,6 +116,9 @@ async function run() {
       res.send(result);
     });
     // after click enroll from course or class route
+
+    // after click enroll from course or class route
+
     app.get("/course/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
