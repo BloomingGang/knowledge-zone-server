@@ -44,6 +44,9 @@ async function run() {
       .collection("blog-collection");
 
     const orderCollection = client.db("knowledge-zone").collection("order");
+    const addReviewCollection = client
+      .db("knowledge-zone")
+      .collection("review");
 
     // for user collection (faisal)
 
@@ -125,6 +128,20 @@ async function run() {
       const { id } = req.params;
       const queary = { _id: ObjectId(id) };
       const result = await blogCollection.findOne(queary);
+      res.send(result);
+    });
+
+    //ADD Review
+    app.post("/addreview", async (req, res) => {
+      const review = req.body;
+
+      const result = await addReviewCollection.insertOne(review);
+      res.send(result);
+    });
+
+    //ADD Review
+    app.get("/addreview", async (req, res) => {
+      const result = await addReviewCollection.find().toArray();
       res.send(result);
     });
 
