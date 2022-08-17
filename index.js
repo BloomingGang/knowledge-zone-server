@@ -53,12 +53,13 @@ async function run() {
     //  class one_to_twelve and courses routes database end
 
     // add course 
-    // add a product api
+    // add a course api
     app.post('/addCourse', async (req, res) => {
       const course = req.body;
       const result = await classAndCourse.insertOne(course);
       res.send(result);
     });
+    
 
    // update a course
    app.put('/courseUpdate/:id', async (req, res) => {
@@ -122,6 +123,14 @@ async function run() {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await classAndCourse.deleteOne(query);
+      res.send(result);
+
+    })
+    // delete book 
+    app.delete("/bookDelete/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await booksCollection.deleteOne(query);
       res.send(result);
 
     })
