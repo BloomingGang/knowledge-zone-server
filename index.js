@@ -49,6 +49,21 @@ async function run() {
 
     const userCollection = client.db("knowledge-zone").collection("users");
 
+    // const searchCourse = client
+    //   .db("classes_courses_info")
+    //   .collection("allClassesCoursesInfo");
+
+    // app.get("/search/:key", async (req, res) => {
+    //   let data = await searchCourse.find({
+    //     $or: [
+    //       { classCourse: { $regex: req.params.key } },
+    //       { title: { $regex: req.params.key } },
+    //     ],
+    //   });
+
+    //   res.send(data);
+    // });
+
     //get detail for payment
 
     app.get("/payment/:id", verifyJwt, async (req, res) => {
@@ -124,12 +139,14 @@ async function run() {
       res.send(result);
     });
 
-    // for user collection (faisal)
+    // for getting user collection (faisal)
 
     app.get("/user", verifyJwt, async (req, res) => {
       const users = await userCollection.find().toArray();
       res.send(users);
     });
+
+    // for making admin from user (faisal)
 
     app.get("/admin/:email", async (req, res) => {
       const email = req.params.email;
@@ -137,6 +154,8 @@ async function run() {
       const isAdmin = user?.role === "admin";
       res.send({ admin: isAdmin });
     });
+
+    // for accessing any resticted route for admin (faisal)
 
     app.put("/user/admin/:email", verifyJwt, async (req, res) => {
       const email = req.params.email;
@@ -185,6 +204,7 @@ async function run() {
     });
     //=============== Update User Profile END By (Rafi) ===============
 
+    // for issueing JWT token (faisal)
     app.put("/user/:email", async (req, res) => {
       const email = req.params.email;
       const user = req.body;
