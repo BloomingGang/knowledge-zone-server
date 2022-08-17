@@ -58,6 +58,29 @@ async function run() {
       .collection("allClassesCoursesInfo");
     //  class one_to_twelve and courses routes database end
 
+
+
+// CCI => classes and courses info notification--
+app.get("/ccis", async (req, res) => {
+  res.status(200).json({
+    unreadData: await classAndCourse.find({}, { projection: { title: 1, state: 1 } }).toArray(),
+    unreadCount: await classAndCourse.countDocuments({ state: "unread" })
+  });
+});
+
+app.put("/cci/:id", async (req, res) => {
+  res.status(201).send(await classAndCourse.updateOne({ _id: ObjectId(req.params.id) }, {
+    $set: {
+      state: "read"
+    }
+  }, { upsert: true }));
+});
+
+//notification for courses code ended
+
+
+
+
     // add course
     // add a product api
     app.post("/addCourse", async (req, res) => {
