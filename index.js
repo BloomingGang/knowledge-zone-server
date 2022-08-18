@@ -100,10 +100,9 @@ app.put("/cci/:id", async (req, res) => {
 
     // search course start
 
-     app.post('/searchCourse',async(req,res)=>{
-      // const searchCourse = req.body.searchCourse;
-      // const matchedServices = classAndCourse.filter(course => course.title.toLowerCase().includes(searchCourse.toLowerCase()));
-      console.log(req.body,"hello");
+     app.get('/searchCourse',async(req,res)=>{
+      const result = await classAndCourse.find().toArray();
+      res.send(result);
 
      })
     // search course end
