@@ -60,6 +60,7 @@ async function run() {
 
 
 
+
 // CCI => classes and courses info notification--
 app.get("/ccis", async (req, res) => {
   res.status(200).json({
@@ -82,12 +83,31 @@ app.put("/cci/:id", async (req, res) => {
 
 
     // add course
-    // add a product api
+    // add a course api
     app.post("/addCourse", async (req, res) => {
+
       const course = req.body;
       const result = await classAndCourse.insertOne(course);
       res.send(result);
     });
+    // add a book api
+    app.post("/addBook", async (req, res) => {
+      const course = req.body;
+      const result = await booksCollection.insertOne(course);
+      res.send(result);
+    });
+
+
+    // search course start
+
+     app.post('/searchCourse',async(req,res)=>{
+      // const searchCourse = req.body.searchCourse;
+      // const matchedServices = classAndCourse.filter(course => course.title.toLowerCase().includes(searchCourse.toLowerCase()));
+      console.log(req.body,"hello");
+
+     })
+    // search course end
+    
 
     // update a course
     app.put("/courseUpdate/:id", async (req, res) => {
@@ -154,7 +174,20 @@ app.put("/cci/:id", async (req, res) => {
       const query = { _id: ObjectId(id) };
       const result = await classAndCourse.deleteOne(query);
       res.send(result);
-    });
+
+
+    })
+    // delete book 
+    app.delete("/bookDelete/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await booksCollection.deleteOne(query);
+      res.send(result);
+
+    })
+
+
+
 
     app.get("/book/:id", async (req, res) => {
       const { id } = req.params;
