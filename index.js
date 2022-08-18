@@ -159,6 +159,14 @@ async function run() {
       res.send(result);
     });
 
+    // delete book
+    app.delete("/bookDelete/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await booksCollection.deleteOne(query);
+      res.send(result);
+    });
+
     app.get("/book/:id", async (req, res) => {
       const { id } = req.params;
       const queary = { _id: ObjectId(id) };
