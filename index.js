@@ -44,36 +44,83 @@ async function run() {
       .collection("blog-collection");
 
     const orderCollection = client.db("knowledge-zone").collection("order");
+    const addReviewCollection = client
+      .db("knowledge-zone")
+      .collection("review");
 
     // for user collection (faisal)
 
     const userCollection = client.db("knowledge-zone").collection("users");
+
     //  class one_to_twelve and courses routes database start
-    const classAndCourse = client.db("classes_courses_info").collection("allClassesCoursesInfo");
+    const classAndCourse = client
+      .db("classes_courses_info")
+      .collection("allClassesCoursesInfo");
     //  class one_to_twelve and courses routes database end
 
-    // add course 
+
+
+
+// CCI => classes and courses info notification--
+app.get("/ccis", async (req, res) => {
+  res.status(200).json({
+    unreadData: await classAndCourse.find({}, { projection: { title: 1, state: 1 } }).toArray(),
+    unreadCount: await classAndCourse.countDocuments({ state: "unread" })
+  });
+});
+
+app.put("/cci/:id", async (req, res) => {
+  res.status(201).send(await classAndCourse.updateOne({ _id: ObjectId(req.params.id) }, {
+    $set: {
+      state: "read"
+    }
+  }, { upsert: true }));
+});
+
+//notification for courses code ended
+
+
+
+
+    // add course
     // add a course api
-    app.post('/addCourse', async (req, res) => {
+    app.post("/addCourse", async (req, res) => {
+
       const course = req.body;
       const result = await classAndCourse.insertOne(course);
       res.send(result);
     });
+    // add a book api
+    app.post("/addBook", async (req, res) => {
+      const course = req.body;
+      const result = await booksCollection.insertOne(course);
+      res.send(result);
+    });
+
+
+    // search course start
+
+     app.post('/searchCourse',async(req,res)=>{
+      // const searchCourse = req.body.searchCourse;
+      // const matchedServices = classAndCourse.filter(course => course.title.toLowerCase().includes(searchCourse.toLowerCase()));
+      console.log(req.body,"hello");
+
+     })
+    // search course end
     
 
-   // update a course
-   app.put('/courseUpdate/:id', async (req, res) => {
-    const updateCourse = req.body;
-    const {id} = req.params;
-    const filter = { _id: ObjectId(id) };
-    const option = { upsert: true };
-    const updateDoc = {
-        $set: updateCourse
-    }
-    const result = await classAndCourse.updateOne(filter, updateDoc, option);
-    res.send(result);
-});
-
+    // update a course
+    app.put("/courseUpdate/:id", async (req, res) => {
+      const updateCourse = req.body;
+      const { id } = req.params;
+      const filter = { _id: ObjectId(id) };
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: updateCourse,
+      };
+      const result = await classAndCourse.updateOne(filter, updateDoc, option);
+      res.send(result);
+    });
 
     //get detail for payment
 
@@ -102,28 +149,32 @@ async function run() {
       res.send(result);
     });
 
-    // create api for get class and courses information 
+    // create api for get class and courses information
+
     app.get("/courses/:course", async (req, res) => {
       const course = req.params.course;
       console.log(course);
       const query = { classCourse: course };
       const result = await classAndCourse.find(query).toArray();
       res.send(result);
-    })
-    // after click enroll from course or class route 
+    });
+    // after click enroll from course or class route
+
+    // after click enroll from course or class route
+
     app.get("/course/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await classAndCourse.findOne(query);
       res.send(result);
-
-    })
+    });
     // delete a course
     app.delete("/course/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await classAndCourse.deleteOne(query);
       res.send(result);
+
 
     })
     // delete book 
@@ -134,6 +185,7 @@ async function run() {
       res.send(result);
 
     })
+
 
 
 
@@ -148,6 +200,7 @@ async function run() {
       const result = await booksCollection.find().toArray();
       res.send(result);
     });
+    
 
     app.get("/blogs", async (req, res) => {
       const result = await blogCollection.find().toArray();
@@ -157,6 +210,20 @@ async function run() {
       const { id } = req.params;
       const queary = { _id: ObjectId(id) };
       const result = await blogCollection.findOne(queary);
+      res.send(result);
+    });
+
+    //ADD Review
+    app.post("/addreview", async (req, res) => {
+      const review = req.body;
+
+      const result = await addReviewCollection.insertOne(review);
+      res.send(result);
+    });
+
+    //ADD Review
+    app.get("/addreview", async (req, res) => {
+      const result = await addReviewCollection.find().toArray();
       res.send(result);
     });
 
@@ -269,7 +336,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("welcome to Knowledge Zone......");
+  res.send("welcome to Knowledge Zone.aa..");
 });
 
 app.listen(port, () => {
