@@ -52,21 +52,6 @@ async function run() {
 
     const userCollection = client.db("knowledge-zone").collection("users");
 
-    // const searchCourse = client
-    //   .db("classes_courses_info")
-    //   .collection("allClassesCoursesInfo");
-
-    // app.get("/search/:key", async (req, res) => {
-    //   let data = await searchCourse.find({
-    //     $or: [
-    //       { classCourse: { $regex: req.params.key } },
-    //       { title: { $regex: req.params.key } },
-    //     ],
-    //   });
-
-    //   res.send(data);
-    // });
-
     //  class one_to_twelve and courses routes database start
     const classAndCourse = client
       .db("classes_courses_info")
@@ -97,15 +82,53 @@ async function run() {
       );
     });
 
+    // CCI => classes and courses info notification--
+    app.get("/ccis", async (req, res) => {
+      res.status(200).json({
+        unreadData: await classAndCourse
+          .find({}, { projection: { title: 1, state: 1 } })
+          .toArray(),
+        unreadCount: await classAndCourse.countDocuments({ state: "unread" }),
+      });
+    });
+
+    app.put("/cci/:id", async (req, res) => {
+      res.status(201).send(
+        await classAndCourse.updateOne(
+          { _id: ObjectId(req.params.id) },
+          {
+            $set: {
+              state: "read",
+            },
+          },
+          { upsert: true }
+        )
+      );
+    });
+
     //notification for courses code ended
 
     // add course
-    // add a product api
+    // add a course api
     app.post("/addCourse", async (req, res) => {
       const course = req.body;
       const result = await classAndCourse.insertOne(course);
       res.send(result);
     });
+    // add a book api
+    app.post("/addBook", async (req, res) => {
+      const course = req.body;
+      const result = await booksCollection.insertOne(course);
+      res.send(result);
+    });
+
+    // search course start
+
+    app.get("/searchCourse", async (req, res) => {
+      const result = await classAndCourse.find().toArray();
+      res.send(result);
+    });
+    // search course end
 
     // update a course
     app.put("/courseUpdate/:id", async (req, res) => {
@@ -171,6 +194,13 @@ async function run() {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await classAndCourse.deleteOne(query);
+      res.send(result);
+    });
+    // delete book
+    app.delete("/bookDelete/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await booksCollection.deleteOne(query);
       res.send(result);
     });
 
