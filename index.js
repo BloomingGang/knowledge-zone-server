@@ -58,34 +58,59 @@ async function run() {
       .collection("allClassesCoursesInfo");
     //  class one_to_twelve and courses routes database end
 
+    // CCI => classes and courses info notification--
+    app.get("/ccis", async (req, res) => {
+      res.status(200).json({
+        unreadData: await classAndCourse
+          .find({}, { projection: { title: 1, state: 1 } })
+          .toArray(),
+        unreadCount: await classAndCourse.countDocuments({ state: "unread" }),
+      });
+    });
 
+    app.put("/cci/:id", async (req, res) => {
+      res.status(201).send(
+        await classAndCourse.updateOne(
+          { _id: ObjectId(req.params.id) },
+          {
+            $set: {
+              state: "read",
+            },
+          },
+          { upsert: true }
+        )
+      );
+    });
 
+    // CCI => classes and courses info notification--
+    app.get("/ccis", async (req, res) => {
+      res.status(200).json({
+        unreadData: await classAndCourse
+          .find({}, { projection: { title: 1, state: 1 } })
+          .toArray(),
+        unreadCount: await classAndCourse.countDocuments({ state: "unread" }),
+      });
+    });
 
-// CCI => classes and courses info notification--
-app.get("/ccis", async (req, res) => {
-  res.status(200).json({
-    unreadData: await classAndCourse.find({}, { projection: { title: 1, state: 1 } }).toArray(),
-    unreadCount: await classAndCourse.countDocuments({ state: "unread" })
-  });
-});
+    app.put("/cci/:id", async (req, res) => {
+      res.status(201).send(
+        await classAndCourse.updateOne(
+          { _id: ObjectId(req.params.id) },
+          {
+            $set: {
+              state: "read",
+            },
+          },
+          { upsert: true }
+        )
+      );
+    });
 
-app.put("/cci/:id", async (req, res) => {
-  res.status(201).send(await classAndCourse.updateOne({ _id: ObjectId(req.params.id) }, {
-    $set: {
-      state: "read"
-    }
-  }, { upsert: true }));
-});
-
-//notification for courses code ended
-
-
-
+    //notification for courses code ended
 
     // add course
     // add a course api
     app.post("/addCourse", async (req, res) => {
-
       const course = req.body;
       const result = await classAndCourse.insertOne(course);
       res.send(result);
@@ -97,16 +122,13 @@ app.put("/cci/:id", async (req, res) => {
       res.send(result);
     });
 
-
     // search course start
 
-     app.get('/searchCourse',async(req,res)=>{
+    app.get("/searchCourse", async (req, res) => {
       const result = await classAndCourse.find().toArray();
       res.send(result);
-
-     })
+    });
     // search course end
-    
 
     // update a course
     app.put("/courseUpdate/:id", async (req, res) => {
@@ -173,20 +195,14 @@ app.put("/cci/:id", async (req, res) => {
       const query = { _id: ObjectId(id) };
       const result = await classAndCourse.deleteOne(query);
       res.send(result);
-
-
-    })
-    // delete book 
+    });
+    // delete book
     app.delete("/bookDelete/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await booksCollection.deleteOne(query);
       res.send(result);
-
-    })
-
-
-
+    });
 
     app.get("/book/:id", async (req, res) => {
       const { id } = req.params;
@@ -199,7 +215,6 @@ app.put("/cci/:id", async (req, res) => {
       const result = await booksCollection.find().toArray();
       res.send(result);
     });
-    
 
     app.get("/blogs", async (req, res) => {
       const result = await blogCollection.find().toArray();
@@ -251,12 +266,14 @@ app.put("/cci/:id", async (req, res) => {
       res.send(result);
     });
 
-    // for user collection (faisal)
+    // for getting user collection (faisal)
 
     app.get("/user", verifyJwt, async (req, res) => {
       const users = await userCollection.find().toArray();
       res.send(users);
     });
+
+    // for making admin from user (faisal)
 
     app.get("/admin/:email", async (req, res) => {
       const email = req.params.email;
@@ -264,6 +281,8 @@ app.put("/cci/:id", async (req, res) => {
       const isAdmin = user?.role === "admin";
       res.send({ admin: isAdmin });
     });
+
+    // for accessing any resticted route for admin (faisal)
 
     app.put("/user/admin/:email", verifyJwt, async (req, res) => {
       const email = req.params.email;
@@ -281,6 +300,14 @@ app.put("/cci/:id", async (req, res) => {
       } else {
         res.status(403).send({ message: "Forbidden message" });
       }
+    });
+
+    // DELETE user from user's collection (faisal)
+    app.delete("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
     });
 
     //=============== Update User Profile START By (Rafi) ===============
@@ -312,6 +339,7 @@ app.put("/cci/:id", async (req, res) => {
     });
     //=============== Update User Profile END By (Rafi) ===============
 
+    // for issueing JWT token (faisal)
     app.put("/user/:email", async (req, res) => {
       const email = req.params.email;
       const user = req.body;
