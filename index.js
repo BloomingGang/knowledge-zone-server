@@ -302,6 +302,14 @@ async function run() {
       }
     });
 
+    // DELETE user from user's collection (faisal)
+    app.delete("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+    });
+
     //=============== Update User Profile START By (Rafi) ===============
     //========== Get User By Email (Rafi) ==========
     app.get("/user/:email", async (req, res) => {
