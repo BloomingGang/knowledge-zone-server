@@ -521,7 +521,7 @@ async function run() {
       res.send(result);
     });
 
-    // update a Book
+    // update a Book kausar
     app.put("/bookUpdate/:id", async (req, res) => {
       const updateBook = req.body;
       const { id } = req.params;
@@ -531,6 +531,18 @@ async function run() {
         $set: updateBook,
       };
       const result = await booksCollection.updateOne(filter, updateDoc, option);
+      res.send(result);
+    });
+    // update a Book kausar
+    app.put("/blogUpdate/:id", async (req, res) => {
+      const updateBlog = req.body;
+      const { id } = req.params;
+      const filter = { _id: ObjectId(id) };
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: updateBlog,
+      };
+      const result = await blogCollection.updateOne(filter, updateDoc, option);
       res.send(result);
     });
 
@@ -587,11 +599,18 @@ async function run() {
       const result = await classAndCourse.deleteOne(query);
       res.send(result);
     });
-    // delete book
+    // delete book kausar
     app.delete("/bookDelete/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await booksCollection.deleteOne(query);
+      res.send(result);
+    });
+    // delete blog kausar
+    app.delete("/blogDelete/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await blogCollection.deleteOne(query);
       res.send(result);
     });
 
