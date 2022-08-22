@@ -43,7 +43,9 @@ async function run() {
       .db("knowledge-zone")
       .collection("blog-collection");
 
+    // user's orderCollection database (faisal)
     const orderCollection = client.db("knowledge-zone").collection("order");
+
     const addReviewCollection = client
       .db("knowledge-zone")
       .collection("review");
@@ -57,6 +59,11 @@ async function run() {
       .db("classes_courses_info")
       .collection("allClassesCoursesInfo");
     //  class one_to_twelve and courses routes database end
+
+    // Instructors database (faisal)
+    const instructorCollection = client
+      .db("instructors")
+      .collection("allSubInstructors");
 
     // CCI => classes and courses info notification--
     app.get("/ccis", async (req, res) => {
@@ -238,6 +245,14 @@ async function run() {
     //ADD Review
     app.get("/addreview", async (req, res) => {
       const result = await addReviewCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/instructors/:subject", async (req, res) => {
+      const subject = req.params.subject;
+      console.log(subject);
+      const query = { Subject: subject };
+      const result = await instructorCollection.find(query).toArray();
       res.send(result);
     });
 
