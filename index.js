@@ -489,6 +489,12 @@ async function run() {
       const result = await booksCollection.insertOne(course);
       res.send(result);
     });
+    // add a blog api
+    app.post("/addBlog", async (req, res) => {
+      const blog = req.body;
+      const result = await blogCollection.insertOne(blog);
+      res.send(result);
+    });
 
     // search course start
 
