@@ -459,7 +459,7 @@ async function run() {
         )
       );
     });
-    // kausar
+    // Book notification start ===(kausar)====
     app.put("/bookN/:id", async (req, res) => {
       res.status(201).send(
         await booksCollection.updateOne(
@@ -474,7 +474,7 @@ async function run() {
       );
     });
 
-    //notification for courses code ended
+    // Book notification End
 
     // add course
     // add a course api
@@ -502,11 +502,15 @@ async function run() {
       const result = await classAndCourse.find().toArray();
       res.send(result);
     });
+    // search course end
+
+    // search book ===(kausar)===
+
     // app.get("/searchBook", async (req, res) => {
     //   const result = await booksCollection.find().toArray();
     //   res.send(result);
     // });
-    // search course end
+    //search book end
 
     // update a course
     app.put("/courseUpdate/:id", async (req, res) => {
@@ -521,7 +525,7 @@ async function run() {
       res.send(result);
     });
 
-    // update a Book kausar
+    // ===update a Book kausar===
     app.put("/bookUpdate/:id", async (req, res) => {
       const updateBook = req.body;
       const { id } = req.params;
@@ -533,7 +537,8 @@ async function run() {
       const result = await booksCollection.updateOne(filter, updateDoc, option);
       res.send(result);
     });
-    // update a Book kausar
+
+    //=== update a Blog kausar===
     app.put("/blogUpdate/:id", async (req, res) => {
       const updateBlog = req.body;
       const { id } = req.params;
@@ -568,12 +573,7 @@ async function run() {
       res.send({ clientSecret: paymentIntent.client_secret });
     });
 
-    app.get("/books", async (req, res) => {
-      const result = await booksCollection.find().toArray();
-      res.send(result);
-    });
-
-    // create api for get class and courses information
+    // create api for get class and courses information (Rakib)
 
     app.get("/courses/:course", async (req, res) => {
       const course = req.params.course;
@@ -582,9 +582,8 @@ async function run() {
       const result = await classAndCourse.find(query).toArray();
       res.send(result);
     });
-    // after click enroll from course or class route
 
-    // after click enroll from course or class route
+    // after click enroll from course or class route (Rakib)
 
     app.get("/course/:id", async (req, res) => {
       const { id } = req.params;
@@ -592,25 +591,32 @@ async function run() {
       const result = await classAndCourse.findOne(query);
       res.send(result);
     });
-    // delete a course
+    // delete a course (Rakib)
     app.delete("/course/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await classAndCourse.deleteOne(query);
       res.send(result);
     });
-    // delete book kausar
+    // ===delete book (kausar)===
     app.delete("/bookDelete/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await booksCollection.deleteOne(query);
       res.send(result);
     });
-    // delete blog kausar
+    //=== delete blog (kausar)===
     app.delete("/blogDelete/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await blogCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // ===get book (kausar)====
+
+    app.get("/books", async (req, res) => {
+      const result = await booksCollection.find().toArray();
       res.send(result);
     });
 
@@ -621,10 +627,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/books", async (req, res) => {
-      const result = await booksCollection.find().toArray();
-      res.send(result);
-    });
+    //=== get blog (kausar)===
 
     app.get("/blogs", async (req, res) => {
       const result = await blogCollection.find().toArray();
@@ -637,7 +640,8 @@ async function run() {
       res.send(result);
     });
 
-    //ADD Review
+    //===ADD Review (kausar)===
+
     app.post("/addreview", async (req, res) => {
       const review = req.body;
 
@@ -645,13 +649,14 @@ async function run() {
       res.send(result);
     });
 
-    //ADD Review
     app.get("/addreview", async (req, res) => {
       const result = await addReviewCollection.find().toArray();
       res.send(result);
     });
 
-    // insert a order
+    // ==================================================================
+
+    // insert a order (faisal)
     app.post("/order", async (req, res) => {
       const order = req.body;
       const result = await orderCollection.insertOne(order);
