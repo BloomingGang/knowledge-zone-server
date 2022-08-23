@@ -256,6 +256,14 @@ async function run() {
       res.send(result);
     });
 
+    // delete instructor api (faisal)
+    app.delete("/instructor/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await instructorCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // api for adding instructor (faisal)
     app.post("/addInstructor", async (req, res) => {
       const instructor = req.body;
