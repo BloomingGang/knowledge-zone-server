@@ -256,6 +256,14 @@ async function run() {
       res.send(result);
     });
 
+    // api for getting single instructor (faisal)
+    app.get("/instructor/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await instructorCollection.findOne(query);
+      res.send(result);
+    });
+
     // delete instructor api (faisal)
     app.delete("/instructor/:id", async (req, res) => {
       const { id } = req.params;
@@ -268,6 +276,23 @@ async function run() {
     app.post("/addInstructor", async (req, res) => {
       const instructor = req.body;
       const result = await instructorCollection.insertOne(instructor);
+      res.send(result);
+    });
+
+    // api for updating instructor (faisal)
+    app.put("/updateInstructor/:id", async (req, res) => {
+      const updateInstructor = req.body;
+      const { id } = req.params;
+      const filter = { _id: ObjectId(id) };
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: updateInstructor,
+      };
+      const result = await instructorCollection.updateOne(
+        filter,
+        updateDoc,
+        option
+      );
       res.send(result);
     });
 
