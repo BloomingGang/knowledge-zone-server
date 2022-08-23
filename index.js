@@ -248,15 +248,22 @@ async function run() {
       res.send(result);
     });
 
+    // create instructor api (faisal)
     app.get("/instructors/:subject", async (req, res) => {
       const subject = req.params.subject;
-      console.log(subject);
       const query = { Subject: subject };
       const result = await instructorCollection.find(query).toArray();
       res.send(result);
     });
 
-    // insert a order
+    // api for adding instructor (faisal)
+    app.post("/addInstructor", async (req, res) => {
+      const instructor = req.body;
+      const result = await instructorCollection.insertOne(instructor);
+      res.send(result);
+    });
+
+    // insert a order (faisal)
     app.post("/order", async (req, res) => {
       const order = req.body;
       const result = await orderCollection.insertOne(order);
