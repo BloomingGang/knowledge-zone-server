@@ -412,7 +412,9 @@ async function run() {
       .db("knowledge-zone")
       .collection("blog-collection");
 
+    // user's orderCollection database (faisal)
     const orderCollection = client.db("knowledge-zone").collection("order");
+
     const addReviewCollection = client
       .db("knowledge-zone")
       .collection("review");
@@ -427,6 +429,7 @@ async function run() {
       .collection("allClassesCoursesInfo");
     //  class one_to_twelve and courses routes database end
 
+<<<<<<< HEAD
     // CCI => classes and courses info notification--
     app.get("/ccis", async (req, res) => {
       res.status(200).json({
@@ -475,6 +478,62 @@ async function run() {
     });
 
     // Book notification End
+=======
+    // Instructors database (faisal)
+    const instructorCollection = client
+      .db("instructors")
+      .collection("allSubInstructors");
+
+    // CCI => classes and courses info notification--
+    app.get("/ccis", async (req, res) => {
+      res.status(200).json({
+        unreadData: await classAndCourse
+          .find({}, { projection: { title: 1, state: 1 } })
+          .toArray(),
+        unreadCount: await classAndCourse.countDocuments({ state: "unread" }),
+      });
+    });
+
+    app.put("/cci/:id", async (req, res) => {
+      res.status(201).send(
+        await classAndCourse.updateOne(
+          { _id: ObjectId(req.params.id) },
+          {
+            $set: {
+              state: "read",
+            },
+          },
+          { upsert: true }
+        )
+      );
+    });
+
+    // CCI => classes and courses info notification--
+    app.get("/ccis", async (req, res) => {
+      res.status(200).json({
+        unreadData: await classAndCourse
+          .find({}, { projection: { title: 1, state: 1 } })
+          .toArray(),
+        unreadCount: await classAndCourse.countDocuments({ state: "unread" }),
+      });
+    });
+
+    app.put("/cci/:id", async (req, res) => {
+      res.status(201).send(
+        await classAndCourse.updateOne(
+          { _id: ObjectId(req.params.id) },
+          {
+            $set: {
+              state: "read",
+            },
+          },
+          { upsert: true }
+        )
+      );
+    });
+
+    //notification for courses code ended
+>>>>>>> be124c10a4cd6b869adc6ef9b31abf2d178752ca
 
     // add course
     // add a course api
@@ -489,12 +548,15 @@ async function run() {
       const result = await booksCollection.insertOne(course);
       res.send(result);
     });
+<<<<<<< HEAD
     // add a blog api
     app.post("/addBlog", verifyJwt, async (req, res) => {
       const blog = req.body;
       const result = await blogCollection.insertOne(blog);
       res.send(result);
     });
+=======
+>>>>>>> be124c10a4cd6b869adc6ef9b31abf2d178752ca
 
     // search course start
 
@@ -503,6 +565,7 @@ async function run() {
       res.send(result);
     });
     // search course end
+<<<<<<< HEAD
 
     // search book ===(kausar)===
 
@@ -511,6 +574,8 @@ async function run() {
       res.send(result);
     });
     //search book end
+=======
+>>>>>>> be124c10a4cd6b869adc6ef9b31abf2d178752ca
 
     // update a course
     app.put("/courseUpdate/:id", verifyJwt, async (req, res) => {
@@ -598,13 +663,18 @@ async function run() {
       const result = await classAndCourse.deleteOne(query);
       res.send(result);
     });
+<<<<<<< HEAD
     // ===delete book (kausar)===
+=======
+    // delete book
+>>>>>>> be124c10a4cd6b869adc6ef9b31abf2d178752ca
     app.delete("/bookDelete/:id", async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await booksCollection.deleteOne(query);
       res.send(result);
     });
+<<<<<<< HEAD
     //=== delete blog (kausar)===
     app.delete("/blogDelete/:id", verifyJwt, async (req, res) => {
       const { id } = req.params;
@@ -619,6 +689,8 @@ async function run() {
       const result = await booksCollection.find().toArray();
       res.send(result);
     });
+=======
+>>>>>>> be124c10a4cd6b869adc6ef9b31abf2d178752ca
 
     app.get("/book/:id", async (req, res) => {
       const { id } = req.params;
@@ -627,7 +699,14 @@ async function run() {
       res.send(result);
     });
 
+<<<<<<< HEAD
     //=== get blog (kausar)===
+=======
+    app.get("/books", async (req, res) => {
+      const result = await booksCollection.find().toArray();
+      res.send(result);
+    });
+>>>>>>> be124c10a4cd6b869adc6ef9b31abf2d178752ca
 
     app.get("/blogs", async (req, res) => {
       const result = await blogCollection.find().toArray();
@@ -654,7 +733,57 @@ async function run() {
       res.send(result);
     });
 
+<<<<<<< HEAD
     // ==================================================================
+=======
+    // create instructor api (faisal)
+    app.get("/instructors/:subject", async (req, res) => {
+      const subject = req.params.subject;
+      const query = { Subject: subject };
+      const result = await instructorCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // api for getting single instructor (faisal)
+    app.get("/instructor/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await instructorCollection.findOne(query);
+      res.send(result);
+    });
+
+    // delete instructor api (faisal)
+    app.delete("/instructor/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: ObjectId(id) };
+      const result = await instructorCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // api for adding instructor (faisal)
+    app.post("/addInstructor", async (req, res) => {
+      const instructor = req.body;
+      const result = await instructorCollection.insertOne(instructor);
+      res.send(result);
+    });
+
+    // api for updating instructor (faisal)
+    app.put("/updateInstructor/:id", async (req, res) => {
+      const updateInstructor = req.body;
+      const { id } = req.params;
+      const filter = { _id: ObjectId(id) };
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: updateInstructor,
+      };
+      const result = await instructorCollection.updateOne(
+        filter,
+        updateDoc,
+        option
+      );
+      res.send(result);
+    });
+>>>>>>> be124c10a4cd6b869adc6ef9b31abf2d178752ca
 
     // insert a order (faisal)
     app.post("/order", async (req, res) => {
@@ -681,12 +810,14 @@ async function run() {
       res.send(result);
     });
 
-    // for user collection (faisal)
+    // for getting user collection (faisal)
 
     app.get("/user", verifyJwt, async (req, res) => {
       const users = await userCollection.find().toArray();
       res.send(users);
     });
+
+    // for making admin from user (faisal)
 
     app.get("/admin/:email", async (req, res) => {
       const email = req.params.email;
@@ -694,6 +825,8 @@ async function run() {
       const isAdmin = user?.role === "admin";
       res.send({ admin: isAdmin });
     });
+
+    // for accessing any resticted route for admin (faisal)
 
     app.put("/user/admin/:email", verifyJwt, async (req, res) => {
       const email = req.params.email;
@@ -711,6 +844,14 @@ async function run() {
       } else {
         res.status(403).send({ message: "Forbidden message" });
       }
+    });
+
+    // DELETE user from user's collection (faisal)
+    app.delete("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
     });
 
     //=============== Update User Profile START By (Rafi) ===============
@@ -742,6 +883,7 @@ async function run() {
     });
     //=============== Update User Profile END By (Rafi) ===============
 
+    // for issueing JWT token (faisal)
     app.put("/user/:email", async (req, res) => {
       const email = req.params.email;
       const user = req.body;
