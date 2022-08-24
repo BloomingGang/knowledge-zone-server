@@ -446,7 +446,7 @@ async function run() {
       });
     });
 
-    app.put("/cci/:id", async (req, res) => {
+    app.put("/cci/:id", verifyJwt, async (req, res) => {
       res.status(201).send(
         await classAndCourse.updateOne(
           { _id: ObjectId(req.params.id) },
@@ -460,7 +460,7 @@ async function run() {
       );
     });
     // Book notification start ===(kausar)====
-    app.put("/bookN/:id", async (req, res) => {
+    app.put("/bookN/:id", verifyJwt, async (req, res) => {
       res.status(201).send(
         await booksCollection.updateOne(
           { _id: ObjectId(req.params.id) },
@@ -490,7 +490,7 @@ async function run() {
       res.send(result);
     });
     // add a blog api
-    app.post("/addBlog", async (req, res) => {
+    app.post("/addBlog", verifyJwt, async (req, res) => {
       const blog = req.body;
       const result = await blogCollection.insertOne(blog);
       res.send(result);
@@ -506,14 +506,14 @@ async function run() {
 
     // search book ===(kausar)===
 
-    // app.get("/searchBook", async (req, res) => {
-    //   const result = await booksCollection.find().toArray();
-    //   res.send(result);
-    // });
+    app.get("/searchBook", verifyJwt, async (req, res) => {
+      const result = await booksCollection.find().toArray();
+      res.send(result);
+    });
     //search book end
 
     // update a course
-    app.put("/courseUpdate/:id", async (req, res) => {
+    app.put("/courseUpdate/:id", verifyJwt, async (req, res) => {
       const updateCourse = req.body;
       const { id } = req.params;
       const filter = { _id: ObjectId(id) };
@@ -539,7 +539,7 @@ async function run() {
     });
 
     //=== update a Blog kausar===
-    app.put("/blogUpdate/:id", async (req, res) => {
+    app.put("/blogUpdate/:id", verifyJwt, async (req, res) => {
       const updateBlog = req.body;
       const { id } = req.params;
       const filter = { _id: ObjectId(id) };
@@ -606,7 +606,7 @@ async function run() {
       res.send(result);
     });
     //=== delete blog (kausar)===
-    app.delete("/blogDelete/:id", async (req, res) => {
+    app.delete("/blogDelete/:id", verifyJwt, async (req, res) => {
       const { id } = req.params;
       const query = { _id: ObjectId(id) };
       const result = await blogCollection.deleteOne(query);
