@@ -481,7 +481,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
+
   res.send("welcome to Knowledge Zone......aa");
+
 });
 
 app.listen(port, () => {
