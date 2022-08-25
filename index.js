@@ -307,12 +307,19 @@ async function run() {
 
     app.get("/order", async (req, res) => {
       const email = req.query.email;
-      const query = { email: email };
+      const query = { email: email ,paid:false};
       const cursor = orderCollection.find(query);
       const orders = await cursor.toArray();
       res.send(orders);
     });
-   
+    // paid order collection 
+    app.get("/paidOrder", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email,paid:true };
+      const cursor = orderCollection.find(query);
+      const orders = await cursor.toArray();
+      res.send(orders);
+    });
 
     // DELETE user's order (faisal)
     app.delete("/order/:id", async (req, res) => {
