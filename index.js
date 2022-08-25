@@ -312,6 +312,7 @@ async function run() {
       const orders = await cursor.toArray();
       res.send(orders);
     });
+   
 
     // DELETE user's order (faisal)
     app.delete("/order/:id", async (req, res) => {
@@ -411,6 +412,24 @@ async function run() {
       );
       res.send({ result, token });
     });
+
+
+     // add payment status and transaction id
+     app.patch('/enrollCourse/:id', verifyJwt, async (req, res) => {
+      const id = req.params.id;
+      const payment = req.body;
+      const filter = { _id: ObjectId(id) };
+      const updatedDoc = {
+          $set: {
+              paid: true,
+              transactionId: payment.transactionId
+          }
+      }
+
+      // const result = await paymentCollection.insertOne(payment);
+      const updateOrder = await orderCollection.updateOne(filter, updatedDoc);
+      res.send(updateOrder);
+  })
   } finally {
     //   await client.close();
   }
