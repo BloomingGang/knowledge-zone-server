@@ -358,7 +358,15 @@ async function run() {
 
     app.get("/order", async (req, res) => {
       const email = req.query.email;
-      const query = { email: email };
+      const query = { email: email ,paid:false};
+      const cursor = orderCollection.find(query);
+      const orders = await cursor.toArray();
+      res.send(orders);
+    });
+    // paid order collection 
+    app.get("/paidOrder", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email,paid:true };
       const cursor = orderCollection.find(query);
       const orders = await cursor.toArray();
       res.send(orders);
@@ -449,6 +457,23 @@ async function run() {
       );
       res.send({ result, token });
     });
+
+
+     // add payment status and transaction id
+     app.patch('/enrollCourse/:id', verifyJwt, async (req, res) => {
+      const id = req.params.id;
+      const payment = req.body;
+      const filter = { _id: ObjectId(id) };
+      const updatedDoc = {
+          $set: {
+              paid: true,
+              transactionId: payment.transactionId
+          }
+      }
+      // const result = await paymentCollection.insertOne(payment);
+      const updateOrder = await orderCollection.updateOne(filter, updatedDoc);
+      res.send(updateOrder);
+  })
   } finally {
     //   await client.close();
   }
@@ -466,3 +491,4 @@ app.listen(port, () => {
 // Heroku Link is given below:
 
 // https://immense-meadow-70411.herokuapp.com/
+
