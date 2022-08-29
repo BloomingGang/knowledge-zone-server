@@ -358,15 +358,15 @@ async function run() {
 
     app.get("/order", async (req, res) => {
       const email = req.query.email;
-      const query = { email: email ,paid:false};
+      const query = { email: email, paid: false };
       const cursor = orderCollection.find(query);
       const orders = await cursor.toArray();
       res.send(orders);
     });
-    // paid order collection 
+    // paid order collection
     app.get("/paidOrder", async (req, res) => {
       const email = req.query.email;
-      const query = { email: email,paid:true };
+      const query = { email: email, paid: true };
       const cursor = orderCollection.find(query);
       const orders = await cursor.toArray();
       res.send(orders);
@@ -410,6 +410,14 @@ async function run() {
       } else {
         res.status(403).send({ message: "Forbidden message" });
       }
+    });
+
+    // DELETE user from user's collection (faisal)
+    app.delete("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
     });
 
     //=============== Update User Profile START By (Rafi) ===============
@@ -458,22 +466,21 @@ async function run() {
       res.send({ result, token });
     });
 
-
-     // add payment status and transaction id
-     app.patch('/enrollCourse/:id', verifyJwt, async (req, res) => {
+    // add payment status and transaction id
+    app.patch("/enrollCourse/:id", verifyJwt, async (req, res) => {
       const id = req.params.id;
       const payment = req.body;
       const filter = { _id: ObjectId(id) };
       const updatedDoc = {
-          $set: {
-              paid: true,
-              transactionId: payment.transactionId
-          }
-      }
+        $set: {
+          paid: true,
+          transactionId: payment.transactionId,
+        },
+      };
       // const result = await paymentCollection.insertOne(payment);
       const updateOrder = await orderCollection.updateOne(filter, updatedDoc);
       res.send(updateOrder);
-  })
+    });
   } finally {
     //   await client.close();
   }
@@ -481,9 +488,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-
   res.send("welcome to Knowledge Zone......aa");
-
 });
 
 app.listen(port, () => {
@@ -493,4 +498,3 @@ app.listen(port, () => {
 // Heroku Link is given below:
 
 // https://immense-meadow-70411.herokuapp.com/
-
