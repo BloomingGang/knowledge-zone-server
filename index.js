@@ -18,6 +18,7 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
+// VerifyJWT token (faisal)
 function verifyJwt(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
