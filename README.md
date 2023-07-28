@@ -1,5 +1,5 @@
 ### The name of Our project is "Knowledge Zone". It's an EdTech based website.
-## Client Site:  [Live link](https://knowledge-zone.onrender.com/). 
+## Client Site:  [Live link](https://knowledge-zone-ebd9c.web.app/). 
 ## Client Site:  [Repository Link](https://github.com/BloomingGang/knowledge-zone-client).
 ## Server Site:  [Live link](https://knowledge-zone-2022.onrender.com/).
 ## Server Site:  [Repository link](https://github.com/BloomingGang/knowledge-zone-server).
@@ -20,7 +20,6 @@
 * User can see their own profile and update profile.
 * User can give review to our website.
 * All users can see notifications of our website.
-* User can contact with us by email and messenger chatting. 
 
 ##### Admin Panel
 * Admin can add, delete and update courses.
@@ -45,5 +44,4 @@
 * Firebase
 * React Firebase Hooks
 * Stripe (payment system)
-* React Messenger Customer Chat
 # knowledge_zone_client
